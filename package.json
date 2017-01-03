@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rebatov/eastpole#readme",
   "dependencies": {
+    "angular-modal-service": "^0.10.1",
     "async": "^2.1.4",
     "bcrypt": "^1.0.1",
     "bcrypt-nodejs": "0.0.3",

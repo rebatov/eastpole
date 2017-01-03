@@ -1,12 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css"
-          href="https://fonts.googleapis.com/css?family=Mirza">
-        <link rel="stylesheet" type="text/css" href="styles/index.css">
-    </head>
-    <body>
-    <h1>INDEX/</h1>
-    </body>
+<html lang="en" ng-app="app">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Mirza">
+    <link rel="stylesheet" type="text/css" href="styles/startmin.css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-3.3.6-dist/css/bootstrap.min.css">
+    <script src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="lib/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="lib/angularjs/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/controllers/main.controller.js"></script>
+    <script type="text/javascript" src="js/app.route.js"></script>
+    <script type="text/javascript" src="js/services/auth.service.js"></script>
+    <script src="lib/angular-modal-service/dst/angular-modal-service.min.js"></script>
+</head>
+
+<body ng-controller="MainController as main">
+{{isLoggedInAsAdmin}}  {{isLoggedInAsStudent}}
+    <div>
+        <div class="header logo" >
+            <a href="/"><span><img src="images/logo.png" alt="logo"></span><strong>east POLE</strong></a>
+            <div class="dropdown" ng-if="isLoggedInAsAdmin">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Add
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Questions</a></li>
+                    <li><a href="#">Students</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" ng-if="isLoggedInAsAdmin">Edit
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Questions</a></li>
+                    <li><a href="#">Students</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" ng-if="isLoggedInAsAdmin">Delete
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Questions</a></li>
+                    <li><a href="#">Students</a></li>
+                </ul>
+            </div>
+             <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">USER
+                    <span class="caret"></span></button>
+                }
+                <ul class="dropdown-menu">
+                   <li ng-if="isLoggedInAsAdmin || isLoggedInAsStudent" ng-click="main.doLogout()"><a href="">Logout</a></li>
+                   <li ng-if="!isLoggedInAsAdmin && !isLoggedInAsStudent"><a href="/login">Login</a></li>
+                    <li><a href="#">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        <h1>{{test}}</h1>
+        <div>
+            <ng-view></ng-view>
+        </div>
+    </div>
+</body>
+
 </html>

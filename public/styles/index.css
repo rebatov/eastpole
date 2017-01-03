@@ -2,10 +2,47 @@
 * @Author: bishal
 * @Date:   2016-12-28 23:25:46
 * @Last Modified by:   bishal
-* @Last Modified time: 2016-12-28 23:33:34
+* @Last Modified time: 2017-01-03 00:34:33
 */
 body {
-    background: url(../images/bg.jpg);
-    font-family: 'Mirza', serif;
-        /*font-size: 48px;*/
+    background: url(../images/bg-new.jpg);
+    font-family: 'Mirza', serif ! important;
+        font-size: 48px;
+}
+
+
+body.ng-scope.ng-binding{
+	margin-top:50px;
+}
+
+.container {
+    padding-top:60px;
+}
+
+.dropdown {
+    float:right;
+    font-weight: bold;
+    text-decoration: underline;
+    padding-right:30px;
+}
+
+.logo {
+    padding-bottom:20px;
+    font-family: 'Josefin Slab', serif;
+    height:100px;
+    display:block;
+}
+.logo img{
+    width:60px;
+    float:left;
+}
+.logo strong {
+    margin-left: 10px;
+    line-height: 60px;
+    float: left;
+    font-size: 32px;
+    word-spacing: 0px;
+    letter-spacing: -6px;
+    font-weight: bold;
+    color: #70bcff;
 }

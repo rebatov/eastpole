@@ -1,8 +1,8 @@
 /*
  * @Author: bishal
  * @Date:   2016-12-28 21:49:20
- * @Last Modified by:   bishal
- * @Last Modified time: 2016-12-29 11:42:09
+ * @Last Modified by:   rebatov
+ * @Last Modified time: 2017-02-03 23:44:18
  */
 
 'use strict';
@@ -21,7 +21,14 @@ qstnController.prototype.create = function(question, callback) {
             callback(null, result);
     });
 }
-
+qstnController.prototype.delete = function(obj,callback) {
+    Question.remove({ _id: {$in:obj} }, function(err, questions) {
+        if (err)
+            callback(err);
+        else
+            callback(null, questions);
+    });
+}
 qstnController.prototype.getQstns = function(callback) {
     Question.find({})
     .sort({createdDate:-1})

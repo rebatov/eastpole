@@ -23,11 +23,9 @@
 </head>
 
 <body ng-controller="MainController as main">
-{{loggedInAsAdmin}}  {{isLoggedInAsStudent}}
     <div>
         <div class="header logo" >
             <a href="/"><span><img src="images/new-logo.png" alt="logo"></span><strong>east POLE</strong></a>
-            <div ng-if="loggedInAsAdmin">
             <div class="dropdown" ng-if="loggedInAsAdmin">
                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"><span class="icon glyphicon glyphicon-plus-sign"></span>Add
                     <span class="caret"></span></button>
@@ -36,7 +34,7 @@
                     <li ng-click="add_users()"><a href="#">Users</a></li>
                 </ul>
             </div>
-             <div class="dropdown">
+             <div class="dropdown" ng-if="loggedInAsStudent || loggedInAsAdmin">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="icon glyphicon glyphicon-user"></span>USER
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
@@ -45,7 +43,7 @@
                     <li><a href="#">Profile</a></li>
                 </ul>
             </div>
-        </div>
+
         </div>
         <h1>{{test}}</h1>
         

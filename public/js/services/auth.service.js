@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2017-01-02 17:17:50
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-03 20:45:58
+ * @Last Modified time: 2017-02-04 01:17:53
  */
 
 'use strict';
@@ -83,7 +83,7 @@ angular.module('authService', [])
         let obj = {};
         obj.token = $window.localStorage.getItem('token');
         obj.role = $window.localStorage.getItem('role');
-        obj.role = $window.localStorage.getItem('username')
+        obj.username = $window.localStorage.getItem('username')
         return obj;
     }
 

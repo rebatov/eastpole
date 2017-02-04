@@ -78,14 +78,44 @@
 <div class="container-fluid" ng-init="preload()">
     <div class="row">
         <div class="col-md-5">
-           <div class="form-group">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="class">Class based table</label>
+                    <select ng-change="whichClass(grade)" ng-model="grade" class="form-control">
+                        <option ng-repeat="c in class" value="{{c}}">{{c}}</option>
+                    </select>
+                    <label for="class">Subject based table</label>
+                    <select ng-change="whichSubject(sub)" ng-model="sub" class="form-control">
+                        <option ng-repeat="s in subject" value="{{s}}">{{s}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" ng-if="!classPagination && !subjectPagination">
                 <label for="class">Docs per page</label>
                 <select ng-change="selector(value)" ng-model="value" class="form-control">
-                <option value="1">1</option>
-                <option value="3">3</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-            </select>
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div class="form-group" ng-if="classPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selectorQstnClass(valCQ)" ng-model="valCQ" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div class="form-group" ng-if="subjectPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selectorQstnSub(valSQ)" ng-model="valSQ" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
             </div>
             <div>
                 <button class="btn btn-warning" ng-disabled="!selectCAT" ng-click="edit_qstn()"><span class="icon glyphicon glyphicon-edit"></span> Edit</button>
@@ -123,20 +153,24 @@
                     </tr>
                 </tbody>
             </table>
-            <paging class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="DoCtrlPagingAct(page, pageSize, total,selCount)">
+            <paging ng-if="!classPagination && !subjectPagination" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="DoCtrlPagingAct(page, pageSize, total,selCount)">
+            </paging>
+            <paging ng-if="classPagination && !subjectPagination" class="small" page="currentPageClassQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="classQstn(page, pageSize, total,selCount)">
+            </paging>
+            <paging ng-if="subjectPagination && !classPagination" class="small" page="currentPageSubQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="subQstn(page, pageSize, total,selCount)">
             </paging>
         </div>
         <div class="col-md-2">
         </div>
         <div class="col-md-5">
-               <div class="form-group">
+            <div class="form-group">
                 <label for="class">Docs per page</label>
                 <select ng-change="selecting(val)" ng-model="val" class="form-control">
-                <option value="1">1</option>
-                <option value="3">3</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-            </select>
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
             </div>
             <div>
                 <button class="btn btn-warning" ng-disabled="!selectUSR" ng-click="edit_user()"><span class="icon glyphicon glyphicon-edit"></span> Edit</button>
@@ -166,7 +200,7 @@
                     </tr>
                 </tbody>
             </table>
-                  <paging class="small" page="cPage" page-size="pSize" total="tot" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userPaging(page, pSize, tot)">
+            <paging class="small" page="cPage" page-size="pSize" total="tot" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userPaging(page, pSize, tot)">
             </paging>
         </div>
     </div>

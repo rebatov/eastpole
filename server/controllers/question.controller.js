@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:49:20
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 21:13:38
+ * @Last Modified time: 2017-02-04 22:57:53
  */
 
 'use strict';
@@ -99,12 +99,47 @@ qstnController.prototype.makeActive = function(obj, callback) {
 
 
 qstnController.prototype.getClass = function(obj,callback) {
-    Question.find({ class: obj.class }, function(err, questions) {
-        if (err)
-            callback(err);
-        else
-            callback(null, questions);
-    });
+    Question.findPaginated({"class":obj.class},function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    },obj.docsPerPage,obj.pageNumber)
+}
+
+qstnController.prototype.getClassCount = function(obj,callback){
+    Question.find({class:obj.class}).count().exec(
+        function(err,qstns){
+            if(err)
+                callback(err)
+            else{
+                callback(null,qstns)
+            }
+        }
+        )
+}
+
+qstnController.prototype.getSubject = function(obj,callback) {
+    Question.findPaginated({"subject":obj.subject},function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    },obj.docsPerPage,obj.pageNumber)
+}
+
+qstnController.prototype.getSubjectCount = function(obj,callback){
+    Question.find({subject:obj.subject}).count().exec(
+        function(err,qstns){
+            if(err)
+                callback(err)
+            else{
+                callback(null,qstns)
+            }
+        }
+        )
 }
 
 function findInactive(obj) {

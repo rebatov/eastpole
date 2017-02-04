@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2017-01-02 15:19:54
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 20:47:55
+ * @Last Modified time: 2017-02-04 23:00:32
  */
 
 'use strict';
@@ -103,6 +103,7 @@ user paging
 
     $scope.whatrole = ["admin", "student"]
     $scope.class = []
+    $scope.subject = ["gk", "Maths", "English"]
     for (var i = 1; i <= 12; i++) {
         $scope.class.push(i);
     }
@@ -474,4 +475,123 @@ user paging
     }
 
 
+    /*
+    class wise filtering
+    */
+    $scope.valCQ = 3
+    $scope.total = 5
+    $scope.whichClass = function(grade) {
+        $scope.classPagination = true;
+        $scope.subjectPagination = false;
+        $scope.whichGrade = grade
+        console.log(grade)
+        var obj = {}
+        obj.class = grade;
+        obj.docsPerPage = initDoc;
+        obj.pageNumber = 1
+        Question.class(obj).success(function(success) {
+            console.log(success)
+            $scope.qstnData = success.documents
+            $scope.total = success.count;
+            $scope.pageSize = obj.docsPerPage;
+        }).error(function(err) {
+            console.log(err);
+        })
+    }
+    $scope.classQstn = function(page, pageSize, total) {
+        console.log(page, pageSize, total)
+        $scope.currentPageClassQ = page
+        var obj = {}
+        obj.docsPerPage = pageSize;
+        obj.pageNumber = $scope.currentPageClassQ;
+        obj.class = $scope.whichGrade;
+        Question.class(obj).
+        success(function(success) {
+            console.log(success)
+            $scope.qstnData = success.documents
+            $scope.total = success.count;
+        }).error(function(err) {
+            console.log(err);
+        })
+
+    }
+
+
+    $scope.selectorQstnClass = function(value) {
+            console.log(value)
+            var obj = {};
+            obj.docsPerPage = parseInt(value);
+            obj.pageNumber = 1;
+            obj.class = $scope.whichGrade
+            Question.class(obj).
+            success(function(success) {
+                    console.log(success)
+                    var o = stringifier(success.documents)
+                    $scope.qstnData = o
+                    $scope.total = success.count
+                    $scope.pageSize = obj.docsPerPage
+                }).error(function(err) {
+                    console.log(err);
+                })
+                // console.log($scope.value)
+        }
+        /*
+        sub wise filtering
+        */
+    $scope.valSQ = 3
+    $scope.whichSubject = function(sub) {
+        $scope.classPagination = false;
+        $scope.subjectPagination = true;
+        $scope.whichSub = sub
+        console.log(sub)
+        var obj = {}
+        obj.subject = sub;
+        obj.docsPerPage = initDoc;
+        obj.pageNumber = 1
+        Question.subject(obj).success(function(success) {
+            console.log(success)
+            $scope.qstnData = success.documents
+            $scope.total = success.count;
+            $scope.pageSize = obj.docsPerPage;
+        }).error(function(err) {
+            console.log(err);
+        })
+    }
+
+    $scope.subQstn = function(page, pageSize, total) {
+        console.log(page, pageSize, total)
+        $scope.currentPageClassQ = page
+        var obj = {}
+        obj.docsPerPage = pageSize;
+        obj.pageNumber = $scope.currentPageClassQ;
+        obj.subject = $scope.whichSub;
+        Question.subject(obj).
+        success(function(success) {
+            console.log(success)
+            $scope.qstnData = success.documents
+            $scope.total = success.count;
+        }).error(function(err) {
+            console.log(err);
+        })
+
+    }
+
+    $scope.selectorQstnSub = function(value) {
+        console.log(value)
+        var obj = {};
+        obj.docsPerPage = parseInt(value);
+        obj.pageNumber = 1;
+        obj.subject = $scope.whichSub
+        Question.subject(obj).
+        success(function(success) {
+                console.log(success)
+                var o = stringifier(success.documents)
+                $scope.qstnData = o
+                $scope.total = success.count
+                $scope.pageSize = obj.docsPerPage
+            }).error(function(err) {
+                console.log(err);
+            })
+            // console.log($scope.value)
+    }
 });

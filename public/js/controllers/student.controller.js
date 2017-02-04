@@ -2,7 +2,7 @@
  * @Author: rebatov
  * @Date:   2017-02-04 11:30:59
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 21:14:03
+ * @Last Modified time: 2017-02-04 21:34:31
  */
 
 'use strict';
@@ -76,5 +76,8 @@ controller('StudentController', function($scope, $rootScope, $location,
             reqarray.push({ _id: obj._id, answer: obj.answer });
         }
     }
+
+
+
 
 })

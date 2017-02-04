@@ -2,7 +2,7 @@
  * @Author: rebatov
  * @Date:   2017-02-03 21:28:05
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 16:46:23
+ * @Last Modified time: 2017-02-04 22:59:27
  */
 
 'use strict';
@@ -25,16 +25,26 @@ angular.module('qstnService', [])
         }
         QuestionFactory.exam = function(obj) {
             console.log(obj)
-            return $http.post('/question/exam',obj)
+            return $http.post('/question/exam', obj)
         }
         QuestionFactory.result = function(obj) {
             console.log(obj)
-            return $http.post('/question/result',obj)
+            return $http.post('/question/result', obj)
         }
 
         QuestionFactory.paging = function(obj) {
             console.log(obj)
-            return $http.post('/question/listNeed',obj)
+            return $http.post('/question/listNeed', obj)
+        }
+
+        QuestionFactory.class = function(obj) {
+            console.log(obj)
+            return $http.post('/question/getClass', obj)
+        }
+
+        QuestionFactory.subject = function(obj) {
+            console.log(obj)
+            return $http.post('/question/getSubject', obj)
         }
         return QuestionFactory;
     });

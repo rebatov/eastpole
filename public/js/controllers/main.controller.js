@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2017-01-02 15:19:54
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 23:00:32
+ * @Last Modified time: 2017-02-05 00:24:52
  */
 
 'use strict';
@@ -252,7 +252,6 @@ user paging
                 idarray = [];
                 $scope.selectCAT = false;
             }
-            console.log();
 
 
         }
@@ -293,6 +292,25 @@ user paging
         }
     }
 
+    $scope.publish_qstns = function() {
+        Question.publish(idarray).success(
+            function(success) {
+                console.log(success)
+                location.reload();
+            }).error(function(err) {
+            console.log(err)
+        })
+    }
+
+    $scope.unpublish_qstns = function() {
+        Question.unpublish(idarray).success(
+            function(success) {
+                console.log(success)
+                location.reload();
+            }).error(function(err) {
+            console.log(err)
+        })
+    }
 
     $scope.qstnEditor = function(obj) {
         let arr = [];
@@ -594,4 +612,64 @@ user paging
             })
             // console.log($scope.value)
     }
+
+
+    /*
+    User class based pagination
+    */
+    $scope.valUsr = 3
+    $scope.whichClassUser = function(grade) {
+        $scope.classUserPagination = true;
+        $scope.whichGrd = grade
+        console.log(grade)
+        var obj = {}
+        obj.class = grade;
+        obj.docsPerPage = initDoc;
+        obj.pageNumber = 1
+        User.class(obj).success(function(success) {
+            console.log(success)
+            $scope.userData = success.documents
+            $scope.total = success.count;
+            $scope.pageSize = obj.docsPerPage;
+        }).error(function(err) {
+            console.log(err);
+        })
+    }
+
+    $scope.selectingClass = function(val) {
+        console.log(val)
+        var obj = {};
+        obj.docsPerPage = parseInt(val);
+        obj.pageNumber = 1
+        obj.class = $scope.whichGrd
+        User.class(obj).
+        success(function(success) {
+                console.log(success)
+                $scope.userData = success.documents
+                $scope.total = success.count
+                $scope.pageSize = obj.docsPerPage
+            }).error(function(err) {
+                console.log(err);
+            })
+            // console.log($scope.value)
+    }
+
+    $scope.userClassPaging = function(page, pageSize, total) {
+        console.log(page, pageSize, total)
+        $scope.currentPage = page
+        var obj = {}
+        obj.docsPerPage = pageSize;
+        obj.pageNumber = $scope.currentPage;
+        obj.class = $scope.whichGrd;
+        User.class(obj).
+        success(function(success) {
+            console.log(success)
+            $scope.userData = success.documents
+            $scope.total = success.count;
+        }).error(function(err) {
+            console.log(err);
+        })
+
+    }
+
 });

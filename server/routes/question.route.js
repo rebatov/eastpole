@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:48:38
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 22:58:41
+ * @Last Modified time: 2017-02-05 00:24:23
  */
 
 'use strict';
@@ -75,6 +75,60 @@ router.post('/create', function(req, res) {
             })
         } else {
             qstnController.create(req.body, function(err, question) {
+                if (err)
+                    res.json({
+                        "status": 500,
+                        "message": "Internal server error",
+                        "data": null
+                    });
+                else
+                    res.json({
+                        "status": 200,
+                        "message": "Success",
+                        "data": question
+                    });
+            })
+        }
+    })
+});
+
+
+router.post('/publish', function(req, res) {
+    islogged.islogged(req, function(err, logged) {
+        if (logged.role != "admin") {
+            res.json({
+                "status": 500,
+                "message": "Not logged in"
+            })
+        } else {
+            qstnController.publish(req.body, function(err, question) {
+                if (err)
+                    res.json({
+                        "status": 500,
+                        "message": "Internal server error",
+                        "data": null
+                    });
+                else
+                    res.json({
+                        "status": 200,
+                        "message": "Success",
+                        "data": question
+                    });
+            })
+        }
+    })
+});
+
+
+router.post('/unpublish', function(req, res) {
+    islogged.islogged(req, function(err, logged) {
+        if (logged.role != "admin") {
+            res.json({
+                "status": 500,
+                "message": "Not logged in"
+            })
+        } else {
+            qstnController.unpublish(req.body, function(err, question) {
                 if (err)
                     res.json({
                         "status": 500,

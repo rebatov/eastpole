@@ -120,13 +120,15 @@
             <div>
                 <button class="btn btn-warning" ng-disabled="!selectCAT" ng-click="edit_qstn()"><span class="icon glyphicon glyphicon-edit"></span> Edit</button>
                 <button class="btn btn-danger" ng-disabled="!selectCAT" ng-click="del_qstn()"><span class="icon glyphicon glyphicon-trash"></span> Delete</button>
+
+                <button class="btn btn-success" ng-disabled="!selectCAT" ng-click="publish_qstns()"><span class="icon glyphicon glyphicon-ok"></span> Publish</button>
+
+                <button class="btn btn-danger" ng-disabled="!selectCAT" ng-click="unpublish_qstns()"><span class="icon glyphicon glyphicon-remove"></span> Unpublish</button>
             </div>
             <table class="table table-responsive">
                 <thead>
                     <tr>
-                        <th>
-                            <input type="checkbox" ng-model="selectallCHK.select" ng-change="selectall(selectallCHK)">
-                        </th>
+                    	<th></th>
                         <th>Question</th>
                         <th>Answer</th>
                         <th>Status</th>
@@ -163,7 +165,25 @@
         <div class="col-md-2">
         </div>
         <div class="col-md-5">
-            <div class="form-group">
+        <div class="row">
+        	<div class="col-sm-5">
+        		<label for="class">Class based user table</label>
+                    <select ng-change="whichClassUser(cl)" ng-model="cl" class="form-control">
+                        <option ng-repeat="cc in class" value="{{cc}}">{{cc}}</option>
+                    </select>
+        	</div>
+        </div>
+            <div class="form-group" ng-if="classUserPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selectingClass(valUsr)" ng-model="valUsr" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+
+            <div class="form-group" ng-if="!classUserPagination">
                 <label for="class">Docs per page</label>
                 <select ng-change="selecting(val)" ng-model="val" class="form-control">
                     <option value="1">1</option>
@@ -200,7 +220,10 @@
                     </tr>
                 </tbody>
             </table>
-            <paging class="small" page="cPage" page-size="pSize" total="tot" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userPaging(page, pSize, tot)">
+            <paging ng-if="!classUserPagination" class="small" page="cPage" page-size="pSize" total="tot" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userPaging(page, pSize, tot)">
+            </paging>
+
+             <paging ng-if="classUserPagination" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userClassPaging(page, pageSize, total)">
             </paging>
         </div>
     </div>

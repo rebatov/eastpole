@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:49:20
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 22:57:53
+ * @Last Modified time: 2017-02-05 00:26:02
  */
 
 'use strict';
@@ -108,6 +108,33 @@ qstnController.prototype.getClass = function(obj,callback) {
     },obj.docsPerPage,obj.pageNumber)
 }
 
+qstnController.prototype.publish = function(idarray,callback){
+   console.log(idarray)
+    Question.update({_id:{$in:idarray}},
+            {$set:{status:"published"}},
+        {multi: true}
+        ,function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    })
+}
+
+qstnController.prototype.unpublish = function(idarray,callback){
+   Question.update({_id:{$in:idarray}},
+            {$set:{status:"unpublished"}},
+        {multi: true}
+        ,function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    })
+}
+
 qstnController.prototype.getClassCount = function(obj,callback){
     Question.find({class:obj.class}).count().exec(
         function(err,qstns){
@@ -181,7 +208,8 @@ qstnController.prototype.exam = function(obj,callback){
     // obj.class=obj.class.toString()
     Question.find({
         class:obj.class,
-        subject:obj.subject 
+        subject:obj.subject,
+        status:"published" 
     }, function(err, questions) {
         if (err)
             callback(err);

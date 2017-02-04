@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:11:11
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 16:18:47
+ * @Last Modified time: 2017-02-04 23:23:16
  */
 
 'use strict';
@@ -134,6 +134,40 @@ router.post('/listNeed/', function(req, res) {
                         count: result2
                     })
                    res.status(200).send(obj);
+                }
+            })
+
+        }
+        
+    });
+});
+
+
+var ob;
+router.post('/getClass/', function(req, res) {
+
+    console.log(req.body);
+    /*
+    author:bishal
+    Getting the needed page of language
+     */
+    userController.getClass(req.body, function(err, result1) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            /*
+            author:bishal
+            Getting the count of total languages in DB
+             */
+            userController.getClassCount(req.body, function(err, result2) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    ob = ({
+                        documents: result1.documents,
+                        count: result2
+                    })
+                   res.status(200).send(ob);
                 }
             })
 

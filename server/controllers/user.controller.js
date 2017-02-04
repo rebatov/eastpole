@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:22:05
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 16:18:54
+ * @Last Modified time: 2017-02-04 23:25:45
  */
 
 'use strict';
@@ -97,5 +97,28 @@ userController.prototype.getNeeded = function(obj,callback){
         }
     },obj.docsPerPage,obj.pageNumber)
 }
+
+
+userController.prototype.getClassCount = function(obj,callback){
+    User.find({class:obj.class}).count().exec(
+    	function(err,count){
+    		if(err)
+    			callback(err)
+    		else{
+    			callback(null,count)
+    		}
+    	})
+};
+
+userController.prototype.getClass = function(obj,callback){
+    User.findPaginated({class:obj.class},function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    },obj.docsPerPage,obj.pageNumber)
+}
+
 
 module.exports = userController;

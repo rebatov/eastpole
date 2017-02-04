@@ -2,7 +2,7 @@
  * @Author: rebatov
  * @Date:   2017-02-03 22:15:52
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 20:05:57
+ * @Last Modified time: 2017-02-04 23:26:23
  */
 
 'use strict';
@@ -34,6 +34,10 @@ angular.module('userService', [])
 
          UserFactory.paging = function(obj){
         	return $http.post('/user/listNeed',obj)
+        }
+
+        UserFactory.class = function(obj){
+        	return $http.post('/user/getClass/',obj)
         }
         return UserFactory;
     });

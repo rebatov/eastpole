@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:22:05
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 00:48:45
+ * @Last Modified time: 2017-02-04 16:18:54
  */
 
 'use strict';
@@ -42,6 +42,17 @@ userController.prototype.getUsers = function(callback) {
         }
     })
 }
+
+userController.prototype.who = function(obj,callback) {
+    User.find({"username":obj.username}, function(err, users) {
+        if (err)
+            callback(err)
+        else {
+            callback(null, users)
+        }
+    })
+}
+
 userController.prototype.edit = function(obj, callback) {
     console.log(obj)
     User.findOneAndUpdate({ _id: obj._id }, obj,
@@ -65,4 +76,26 @@ userController.prototype.delete = function(arr,callback){
 		}
 	})
 }
+
+userController.prototype.getCount = function(obj,callback){
+    User.count({},function(err,result){
+        if(err){
+            callback(err)
+        }
+        else{
+            callback(null,result);
+        }
+    })
+};
+
+userController.prototype.getNeeded = function(obj,callback){
+    User.findPaginated({},function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    },obj.docsPerPage,obj.pageNumber)
+}
+
 module.exports = userController;

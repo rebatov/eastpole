@@ -1,8 +1,8 @@
 /*
 * @Author: bishal
 * @Date:   2016-12-29 20:28:02
-* @Last Modified by:   bishal
-* @Last Modified time: 2016-12-29 21:18:41
+* @Last Modified by:   rebatov
+* @Last Modified time: 2017-02-04 16:22:03
 */
 
 'use strict';
@@ -57,4 +57,29 @@ Result.find({term:term}).exec(function(err,result){
 		callback(null,result);
 })
 }
+
+resultController.prototype.getCount = function(obj,callback){
+    Result.count({},function(err,result){
+        if(err){
+            callback(err)
+        }
+        else{
+            callback(null,result);
+        }
+    })
+};
+
+resultController.prototype.getNeeded = function(obj,callback){
+    Result.findPaginated({},function(err,result){
+        if(err)
+            callback(err)
+        else{
+            callback(null,result)
+        }
+    },obj.docsPerPage,obj.pageNumber)
+}
+
+
+
+
 module.exports = resultController;

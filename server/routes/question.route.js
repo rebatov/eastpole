@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:48:38
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-03 23:44:09
+ * @Last Modified time: 2017-02-04 16:09:33
  */
 
 'use strict';
@@ -199,4 +199,94 @@ router.post('/getClass', function(req, res) {
     })
 });
 
+
+router.post('/exam', function(req, res) {
+    islogged.islogged(req, function(err, logged) {
+        if (logged.role != "student") {
+            res.json({
+                "status": 500,
+                "message": "Not student"
+            })
+        } else {
+            qstnController.exam(req.body, function(err, questions) {
+                if (err)
+                    res.json({
+                        "status": 500,
+                        "message": "Internal server error",
+                        "data": null
+                    });
+                else
+                    res.json({
+                        "status": 200,
+                        "message": "Success",
+                        "data": questions
+                    });
+            })
+        }
+    })
+});
+
+
+router.post('/result', function(req, res) {
+    islogged.islogged(req, function(err, logged) {
+        if (logged.role != "student") {
+            res.json({
+                "status": 500,
+                "message": "Not student"
+            })
+        } else {
+            qstnController.result(req.body, function(err, questions) {
+                if (err)
+                    res.json({
+                        "status": 500,
+                        "message": "Internal server error",
+                        "data": null
+                    });
+                else
+                    res.json({
+                        "status": 200,
+                        "message": "Success",
+                        "data": questions
+                    });
+            })
+        }
+    })
+});
+
+
+/*
+paginated questions
+*/
+var obj;
+router.post('/listNeed/', function(req, res) {
+
+    console.log(req.body);
+    /*
+    author:bishal
+    Getting the needed page of language
+     */
+    qstnController.getNeeded(req.body, function(err, result1) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            /*
+            author:bishal
+            Getting the count of total languages in DB
+             */
+            qstnController.getCount(req.body, function(err, result2) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    obj = ({
+                        documents: result1.documents,
+                        count: result2
+                    })
+                   res.status(200).send(obj);
+                }
+            })
+
+        }
+        
+    });
+});
 module.exports = router;

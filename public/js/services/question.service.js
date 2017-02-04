@@ -2,7 +2,7 @@
  * @Author: rebatov
  * @Date:   2017-02-03 21:28:05
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 00:41:49
+ * @Last Modified time: 2017-02-04 16:46:23
  */
 
 'use strict';
@@ -23,6 +23,18 @@ angular.module('qstnService', [])
         QuestionFactory.delete = function(idarray) {
             return $http.post('/question/delete', idarray)
         }
+        QuestionFactory.exam = function(obj) {
+            console.log(obj)
+            return $http.post('/question/exam',obj)
+        }
+        QuestionFactory.result = function(obj) {
+            console.log(obj)
+            return $http.post('/question/result',obj)
+        }
 
+        QuestionFactory.paging = function(obj) {
+            console.log(obj)
+            return $http.post('/question/listNeed',obj)
+        }
         return QuestionFactory;
     });

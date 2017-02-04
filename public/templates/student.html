@@ -1,9 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-    STUUUUUUUUUUUUUUUUUUDENT
-    </body>
-</html>
+<div ng-controller="StudentController" ng-init="getQstns()">
+    <h1>Welcome {{user}}</h1>
+    <div>
+        <ol>
+            <li ng-repeat="qstn in qstns">
+                <h4>{{qstn.question}}</h4>
+                <label ng-repeat="opt in qstn.options">
+                    <input type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">{{opt}}
+                </label>
+                <!--    <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]">
+     <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]">
+     <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]"> -->
+            </li>
+        </ol>
+        <button ng-click="submitQstns()" class="btn btn-primary">Done</button>
+    </div>
+</div>

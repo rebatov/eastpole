@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:22:05
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 23:25:45
+ * @Last Modified time: 2017-02-05 16:18:43
  */
 
 'use strict';
@@ -29,6 +29,16 @@ userController.prototype.create = function(obj, callback) {
                     callback(null, result);
                 }
             })
+        }
+    })
+}
+
+userController.prototype.getRollClass = function(obj,callback) {
+    User.find({class:obj.class,roll:obj.roll}, function(err, users) {
+        if (err)
+            callback(err)
+        else {
+            callback(null, users)
         }
     })
 }

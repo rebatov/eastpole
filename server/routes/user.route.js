@@ -2,7 +2,7 @@
  * @Author: bishal
  * @Date:   2016-12-28 21:11:11
  * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 23:23:16
+ * @Last Modified time: 2017-02-05 16:24:32
  */
 
 'use strict';
@@ -31,16 +31,37 @@ router.get('/getUsers', function(req, res) {
         }
     });
 });
-
+var rcErr = "E11000 duplicate key error collection: student.users index: roll_1_class";
+var uErr = "E11000 duplicate key error collection: student.users index: username_1 dup key";
 router.post('/createUser', function(req, res) {
     userController.create(req.body, function(err, user) {
-        if (err)
-            res.json({
-                "status": 500,
-                "message": "Internal server error",
-                "data": null
-            })
-        else {
+        if (err) {
+            if (err.errmsg.indexOf(rcErr) > -1) {
+                    userController.getRollClass(req.body, function(error, usr) {
+                        if (error)
+                            res.json({
+                                "status": 500,
+                                "message": "Internal server error",
+                                "data": error
+                            })
+                        else {
+                            usr[0].password = undefined;
+                            console.log(usr[0])
+                            res.json({
+                                "status": 200,
+                                "message": "User with your class and roll number already exists",
+                                "data": usr
+                            })
+                        }
+                    })
+                }
+                else{
+                    res.json({
+                                "status": 500,
+                                "message": req.body.username+" username already exists"
+                            })
+                }
+        } else {
             res.json({
                 "status": 200,
                 "message": "Success",
@@ -133,12 +154,12 @@ router.post('/listNeed/', function(req, res) {
                         documents: result1.documents,
                         count: result2
                     })
-                   res.status(200).send(obj);
+                    res.status(200).send(obj);
                 }
             })
 
         }
-        
+
     });
 });
 
@@ -167,12 +188,12 @@ router.post('/getClass/', function(req, res) {
                         documents: result1.documents,
                         count: result2
                     })
-                   res.status(200).send(ob);
+                    res.status(200).send(ob);
                 }
             })
 
         }
-        
+
     });
 });
 

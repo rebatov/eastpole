@@ -1,8 +1,8 @@
 /*
  * @Author: bishal
  * @Date:   2017-01-02 17:17:50
- * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 01:17:53
+ * @Last Modified by:   bishal
+ * @Last Modified time: 2017-02-12 09:23:41
  */
 
 'use strict';
@@ -23,9 +23,11 @@ angular.module('authService', [])
                 password: password
             })
             .success(function(data) {
-                console.log("logged in")
-                AuthToken.setToken(data);
-                return data;
+                console.log("logged in",data)
+                if(data.success){
+                    AuthToken.setToken(data);
+                    return data;
+                }
             })
     }
 

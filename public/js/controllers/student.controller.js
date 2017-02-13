@@ -1,14 +1,14 @@
 /*
  * @Author: rebatov
  * @Date:   2017-02-04 11:30:59
- * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-04 21:34:31
+ * @Last Modified by:   bishal
+ * @Last Modified time: 2017-02-12 12:38:27
  */
 
 'use strict';
 angular.module('stuCtrl', []).
-controller('StudentController', function($scope, $rootScope, $location,
-    Auth, User, Question
+controller('StudentController', function($scope, $rootScope, 
+    $location,Auth, User, Question
 ) {
     var reqObj = {
         "_id": null,
@@ -27,6 +27,7 @@ controller('StudentController', function($scope, $rootScope, $location,
                     console.log(success)
                     $scope.subject = success.data[0].subject
                     $scope.class = success.data[0].class
+                    $scope.term = success.data[0].term
                     $scope.qstns = success.data
                 }).error(function(err) {
                     console.log(err);
@@ -54,7 +55,9 @@ controller('StudentController', function($scope, $rootScope, $location,
         var obj = {
         	reqarray:reqarray,
         	username:$scope.user,
-        	subject:$scope.subject
+        	subject:$scope.subject,
+            class:$scope.class,
+            term:$scope.term
         }
         Question.result(obj).
         success(function(success){

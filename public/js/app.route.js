@@ -1,8 +1,8 @@
 /*
 * @Author: bishal
 * @Date:   2017-01-02 16:50:01
-* @Last Modified by:   rebatov
-* @Last Modified time: 2017-02-04 01:26:09
+* @Last Modified by:   bishal
+* @Last Modified time: 2017-02-12 09:49:49
 */
 
 'use strict';
@@ -18,7 +18,8 @@ angular.module('appRoutes' , ['ngRoute'])
           resolve:{
         /*To check whether the user has access with token*/
         function($location,AuthToken){ 
-            if(!AuthToken.getTokenAndRole().token){ 
+            if(!AuthToken.getTokenAndRole().token || AuthToken.getTokenAndRole().token==undefined){ 
+                 console.log('TOKEN')
                  $location.path('/login');
             }
             if(AuthToken.getTokenAndRole().role === "student"){
@@ -29,14 +30,32 @@ angular.module('appRoutes' , ['ngRoute'])
 
     }).
     when('/student',{
-         templateUrl: 'templates/student.html'
+         templateUrl: 'templates/student.html',
+         resolve:{
+            function($location,AuthToken){
+                if(AuthToken.getTokenAndRole().role !== "student"){
+                $location.path('/')
+            }
+            }
+         }
+    }).
+        when('/result',{
+         templateUrl: 'templates/result.html',
+         resolve:{
+            function($location,AuthToken){
+                if(AuthToken.getTokenAndRole().role !== "admin"){
+                $location.path('/')
+            }
+            }
+         }
     }).
 	 when('/login',{
          templateUrl: 'templates/login.html',
                    resolve:{
         /*To check whether the user has access with token*/
         function($location,AuthToken){ 
-            if(AuthToken.getTokenAndRole().token){ 
+            if(AuthToken.getTokenAndRole().token!=undefined){ 
+                console.log('TOKEN')
                  $location.path('/');
             }
         }

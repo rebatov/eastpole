@@ -15,10 +15,12 @@
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/controllers/main.controller.js"></script>
     <script type="text/javascript" src="js/controllers/student.controller.js"></script>
+    <script type="text/javascript" src="js/controllers/result.controller.js"></script>
     <script type="text/javascript" src="js/app.route.js"></script>
     <script type="text/javascript" src="js/services/auth.service.js"></script>
     <script type="text/javascript" src="js/services/question.service.js"></script>
     <script type="text/javascript" src="js/services/user.service.js"></script>
+     <script type="text/javascript" src="js/services/result.service.js"></script>
     <script src="lib/angular-modal-service/dst/angular-modal-service.min.js"></script>
     <script src="lib/modal.js"></script>
     <script src="lib/paging.min.js"></script>
@@ -28,17 +30,10 @@
     <div>
         <div class="header logo" >
             <a href="/"><span><img src="images/new-logo.png" alt="logo"></span><strong>east POLE</strong></a>
-            <div class="dropdown" ng-if="loggedInAsAdmin">
-                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"><span class="icon glyphicon glyphicon-plus-sign"></span>Add
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li ng-click="add_questions()"><a href="#">Questions</a></li>
-                    <li ng-click="add_users()"><a href="#">Users</a></li>
-                </ul>
-            </div>
              <div class="dropdown" ng-if="loggedInAsStudent || loggedInAsAdmin">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="icon glyphicon glyphicon-user"></span>USER
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="icon glyphicon glyphicon-user" style="padding-right:5px;"></span>{{username}}
                     <span class="caret"></span></button>
+                
                 <ul class="dropdown-menu">
                    <li ng-show="loggedInAsAdmin || loggedInAsStudent" ng-click="main.doLogout()"><a href="">Logout</a></li>
                    <li ng-if="!loggedInAsAdmin && !loggedInAsStudent"><a href="/login">Login</a></li>

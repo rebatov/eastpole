@@ -1,0 +1,51 @@
+<div class="container" ng-controller="ResultController" ng-init="getResult()">
+    <div class="col-md-3">
+        <label for="class">Docs per page</label>
+        <select ng-change="selector(val)" ng-model="val" class="form-control">
+            <option value=1>1</option>
+            <option value=3>3</option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <span ng-click="advancedFilter()" class="span" style="cursor:pointer;">Advanced filters</span>
+        <form ng-if="returner" role="form" ng-submit="runQuery(query)">
+            <div class="form-group">
+                <label for="name">Class</label>
+                <input ng-model="query.class" type="text" class="form-control" placeholder="Enter the class" />
+                <label for="name">Subject</label>
+                <input ng-model="query.subject" type="text" class="form-control" placeholder="Enter the subject" />
+            </div>
+            <button type="submit" class="btn btn-default">Query</button>
+        </form>
+    </div>
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Username</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Year</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat=" each in rsltData | filter:search ">
+                <td>
+                    <input type="checkbox" ng-change="selectRslt(chk,each)" ng-model="chk.select"> {{selecteach}}
+                </td>
+                <td>{{each.username}}</td>
+                <td>{{each.class}}</td>
+                <td>{{each.subject}}</td>
+                <td>{{each.score}}</td>
+                <td>{{each.year}}</td>
+                <td>{{each.date}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <paging ng-if="ifResult" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="DoCtrlPagingAct(page, pageSize, total,val)">
+    </paging>
+</div>

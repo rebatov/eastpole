@@ -1,41 +1,48 @@
 /*
 * @Author: bishal
 * @Date:   2016-12-28 23:25:46
-* @Last Modified by:   rebatov
-* @Last Modified time: 2017-02-04 01:10:42
+* @Last Modified by:   bishal
+* @Last Modified time: 2017-02-12 17:54:02
 */
+
 body {
-    background: url(../images/green.jpg);
+    background-color: whitesmoke ! important;
     font-family: 'Mirza', serif ! important;
-        font-size: 48px;
+    font-size: 48px;
+    color: #074f5d ! important;
 }
 
-
-body.ng-scope.ng-binding{
-	margin-top:50px;
+body.ng-scope.ng-binding {
+    margin-top: 50px;
+}
+h1,h2,h3 {
+    font-weight: normal;
+    color: #df8800 ! important;
 }
 
 .container {
-    padding-top:60px;
+    padding-top: 60px;
 }
 
 .dropdown {
-    float:right;
+    float: right;
     font-weight: bold;
     text-decoration: underline;
-    padding-right:30px;
+    padding-right: 30px;
 }
 
 .logo {
-    padding-bottom:20px;
+    padding-bottom: 20px;
     font-family: 'Josefin Slab', serif;
-    height:100px;
-    display:block;
+    height: 100px;
+    display: block;
 }
-.logo img{
-    width:60px;
-    float:left;
+
+.logo img {
+    width: 60px;
+    float: left;
 }
+
 .logo strong {
     margin-left: 10px;
     line-height: 60px;
@@ -45,4 +52,9 @@ body.ng-scope.ng-binding{
     letter-spacing: -6px;
     font-weight: bold;
     color: #70bcff;
+}
+
+.signup {
+    cursor: pointer;
+    float: right;
 }

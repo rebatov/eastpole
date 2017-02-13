@@ -1,8 +1,8 @@
 /*
 * @Author: rebatov
 * @Date:   2017-02-03 21:05:47
-* @Last Modified by:   rebatov
-* @Last Modified time: 2017-02-03 21:05:49
+* @Last Modified by:   bishal
+* @Last Modified time: 2017-02-11 20:55:40
 */
 
 'use strict';
@@ -11,7 +11,6 @@ var mymodal = angular.module('mymodal', []);
 mymodal.factory('Modal', function () {
     var modalfact = {};
     modalfact.showModal = true;
-    modalfact.hello ='hii';
     modalfact.toggleModal = function(){
 	   console.log('at modal');
         modalfact.showModal = true;
@@ -32,14 +31,15 @@ mymodal.directive('modal', function () {
             '</div>' + 
           '</div>' + 
         '</div>',
-      restrict: 'E',
+      restrict: 'EA',
       transclude: true,
       replace:true,
       scope:true,
       link: function postLink(scope, element, attrs) {
+        console.log('Hiyaaa')
         scope.title = attrs.title;
-
         scope.$watch(attrs.visible, function(value){
+          console.log(scope,value);
           if(value == true)
             $(element).modal('show');
           else

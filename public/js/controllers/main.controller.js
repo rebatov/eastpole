@@ -1,8 +1,8 @@
 /*
  * @Author: bishal
  * @Date:   2017-01-02 15:19:54
- * @Last Modified by:   rebatov
- * @Last Modified time: 2017-02-05 00:24:52
+ * @Last Modified by:   bishal
+ * @Last Modified time: 2017-02-12 10:01:41
  */
 
 'use strict';
@@ -107,7 +107,7 @@ user paging
     for (var i = 1; i <= 12; i++) {
         $scope.class.push(i);
     }
-    $scope.stat = ["Publish", "Unpublish"]
+    $scope.stat = ["published", "unpublished"]
     var hideNav = function() {
         console.log("Hidenav");
         $scope.flagNav = false;
@@ -162,8 +162,10 @@ user paging
                     $location.path('/');
                 }
                 // $scope.Username = global;
-                else
+                else{
                     pointer.error = data.message;
+                    console.log(pointer.error)
+                }
                 $scope.flagInvalid = true;
 
             });
@@ -174,6 +176,15 @@ user paging
         Auth.logout();
         $location.path('/logout');
         //        window.location.reload();
+    }
+
+    /*
+    signup
+    */
+    $scope.signup=function(){
+        Modal.toggleModal();
+        $scope.showaddUserModal = Modal.showModal;
+        console.log($scope.showaddUserModal)
     }
 
     //    $scope.signout = function(){
@@ -225,9 +236,11 @@ user paging
             User.create(obj).
             success(function(success) {
                 console.log(success)
+                $scope.nowlogin = true;
             }).
             error(function(err) {
                 console.log(err)
+                $scope.err = true;
             })
         }
     }

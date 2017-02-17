@@ -77,3 +77,20 @@ h1,h2,h3 {
 .panel-info {
     border-color: whitesmoke !important;
 }
+.action{
+  text-decoration: none;
+  float:right;
+  padding:25px;
+}
+a:hover{
+  text-decoration: none !important;
+}
+body > div > div.header.logo > div > span.underline > a{
+  padding-left:8px;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: #F5DEB3 !important;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    background-color: #F5DEB3 !important;
+}

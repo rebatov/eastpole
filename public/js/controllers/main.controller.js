@@ -16,6 +16,18 @@ angular.module('mainCtrl', ['angularModalService', 'mymodal']).
 controller('MainController', function(Modal,
     $rootScope, $location, Auth, $scope,
     $http, ModalService, Question, User,Result) {
+
+
+// time check
+let hr = new Date().getHours();
+if(hr >= 12 && hr <= 17)
+  $scope.welcome = "Good Afternoon!!"
+if(hr > 17 && hr <=23 )
+  $scope.welcome = "Good Night!!"
+if(hr == 0)
+  $scope.welcome="Boo... it's midnight!! "
+if(hr > 0 && hr <=11)
+  $scope.welcome = "Good Morning!!"
     var initDoc = 3,
         initPage = 1;
     $scope.selCount = initDoc;

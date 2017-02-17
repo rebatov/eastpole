@@ -55,5 +55,8 @@ factory('Result', function($http) {
         console.log(idarray)
         return $http.post('/question/unpublish', idarray)
     }
+    ResultFactory.count = function() {
+        return $http.get('/result/count')
+    }
     return ResultFactory;
 });

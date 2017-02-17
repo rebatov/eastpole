@@ -3,9 +3,9 @@
     <div>
         <ol>
             <li ng-repeat="qstn in qstns">
-                <h4>{{qstn.question}}</h4>
-                <label ng-repeat="opt in qstn.options">
-                    <input type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">{{opt}}
+                <h4 class="qstn">{{qstn.question}}</h4>
+                <label ng-repeat="opt in qstn.options" class="opt">
+                    <input class="val" type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">{{opt}}
                 </label>
                 <!--    <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]">
      <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]">

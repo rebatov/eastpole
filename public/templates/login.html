@@ -5,33 +5,26 @@
         <div class="container-fluid" ng-controller="MainController as log">
             <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                 <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <div class="panel-title text-center">LOGIN</div>
-                    </div>
+                  <img src="images/new-logo.png" alt="" style="padding-left:80px;">
                     <div style="padding-top:30px" class="panel-body">
                         <form class="form-horizontal" method="post" role="form" id="myForm" name="myForm" ng-submit="log.doLogin()">
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input ng-model="log.loginData.username" type="text" class="form-control" name="username" placeholder="Your Username" required>
-                                <div class="alert alert-danger" ng-show="myForm.username.$error.required && !myForm.username.$pristine">
-                                    <strong>Username required</strong>
-                                </div>
+                            </div>
+                            <div style="margin-top:10px;" class="alert alert-danger" ng-show="myForm.username.$error.required && !myForm.username.$pristine">
+                              <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Username required</strong>
                             </div>
                             <br>
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                 <input ng-model="log.loginData.password" type="password" class="form-control" name="pwd" placeholder="Your password" required>
-                                <div ng-show="myForm.pwd.$error.required && !myForm.pwd.$pristine" class="alert alert-danger">
-                                    <strong>Password required</strong>
-                                </div>
+                            </div>
+                            <div style="margin-top:10px;" ng-show="myForm.pwd.$error.required && !myForm.pwd.$pristine" class="alert alert-danger">
+                              <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Password required</strong>
                             </div>
                             <br>
-                            <div class="form-group">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-10">
                                     <input ng-disabled="!myForm.$valid" type="submit" class="btn btn-primary btn-block sub" value="LOG IN">
-                                </div>
-                            </div>
                             <span class="signup" ng-click="signup()">Don't have an account? Create now!</span>
                         </form>
                     </div>

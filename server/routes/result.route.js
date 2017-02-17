@@ -79,7 +79,7 @@ router.post('/term', function(req, res) {
             })
 
         }
-        
+
     });
 })
 
@@ -111,7 +111,7 @@ router.post('/subject', function(req, res) {
             })
 
         }
-        
+
     });
 })
 
@@ -164,7 +164,7 @@ router.post('/class', function(req, res) {
             })
 
         }
-        
+
     });
 })
 
@@ -201,13 +201,31 @@ router.post('/listNeed/', function(req, res) {
             })
 
         }
-        
+
     });
 });
 
 
 router.post('/query',function(req,res){
     resultController.parseQuery(req.body,function(err,data){
+        if(err){
+            res.json({
+                "status":500,
+                "message":"Internal server error"
+            })
+        }
+        else{
+            res.json({
+                "status":200,
+                "message":"success",
+                data:data
+            })
+        }
+    })
+})
+
+router.get('/count',function(req,res){
+    resultController.getCount(req.body,function(err,data){
         if(err){
             res.json({
                 "status":500,

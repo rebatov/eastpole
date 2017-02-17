@@ -1,0 +1,311 @@
+<div class="col-sm-9" ng-controller="MainController">
+            <div class="dropdown" ng-if="loggedInAsAdmin">
+                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"><span class="icon glyphicon glyphicon-plus-sign"></span>Add
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-click="add_questions()"><a href="#">Questions</a></li>
+                    <li ng-click="add_users()"><a href="#">Users</a></li>
+                </ul>
+            </div>
+    <modal title="Add questions" visible="showaddQstnModal">
+        <form role="form" ng-submit="qstnAdder(addQstn)">
+            <div class="form-group">
+                <label for="question">Question</label>
+                <textarea ng-model="addQstn.question" type="text" class="form-control" placeholder="Enter Question"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="options">Options</label>
+                <input ng-model="addQstn.options" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="options">Answer</label>
+                <input ng-model="addQstn.answer" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="class">Class</label>
+                <input ng-model="addQstn.class" class="form-control" id="status" placeholder="Class" />
+            </div>
+            <div class="form-group">
+                <label for="class">Subject</label>
+                <input ng-model="addQstn.subject" class="form-control" id="subject" placeholder="Subject" />
+            </div>
+            <div class="form-group">
+                <label for="class">Status</label>
+                <select name="status" ng-model="addQstn.status" class="form-control" id="status" placeholder="Status" required>
+                    <option value="">Please Select Status</option>
+                    <option ng-repeat="x in stat" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </modal>
+<div class="container">
+    <modal title="Add user" visible="showaddUserModal">
+        <form role="form" ng-submit="userAdder(addUser)">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input ng-model="addUser.name" type="text" class="form-control" placeholder="Enter the name" />
+            </div>
+            <div class="form-group">
+                <label for="options">Username</label>
+                <input ng-model="addUser.username" class="form-control" placeholder="Enter the username" />
+            </div>
+            <div class="form-group">
+                <label for="options">Password</label>
+                <input type="password" ng-model="addUser.password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="options">Retype Password</label>
+                <input type="password" ng-model="addUser.rePassword" class="form-control" />
+            </div>
+            <div class="form-group">
+                <select name="role" ng-model="addUser.role" class="form-control" id="role" placeholder="role" required>
+                    <option value="">Please Select Role</option>
+                    <option ng-repeat="x in whatrole" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="status" ng-model="addUser.class" class="form-control" id="class" placeholder="Status" required>
+                    <option value="">Please Select Class</option>
+                    <option ng-repeat="x in class" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="section">Section</label>
+                <input ng-model="addUser.section" class="form-control" id="section" placeholder="Add section" />
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input ng-model="addUser.address" class="form-control" id="address" placeholder="Add the address" />
+            </div>
+            <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </modal>
+</div>
+<div ng-init="preload()">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="class">Class based table</label>
+                    <select ng-change="whichClass(grade)" ng-model="grade" class="form-control">
+                        <option ng-repeat="c in class" value="{{c}}">{{c}}</option>
+                    </select>
+                    <label for="class">Subject based table</label>
+                    <select ng-change="whichSubject(sub)" ng-model="sub" class="form-control">
+                        <option ng-repeat="s in subject" value="{{s}}">{{s}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" ng-if="!classPagination && !subjectPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selector(value)" ng-model="value" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div class="form-group" ng-if="classPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selectorQstnClass(valCQ)" ng-model="valCQ" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div class="form-group" ng-if="subjectPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selectorQstnSub(valSQ)" ng-model="valSQ" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div>
+                <button class="btn btn-warning" ng-disabled="!selectCAT" ng-click="edit_qstn()"><span class="icon glyphicon glyphicon-edit"></span> Edit</button>
+                <button class="btn btn-danger" ng-disabled="!selectCAT" ng-click="del_qstn()"><span class="icon glyphicon glyphicon-trash"></span> Delete</button>
+
+                <button class="btn btn-success" ng-disabled="!selectCAT" ng-click="publish_qstns()"><span class="icon glyphicon glyphicon-ok"></span> Publish</button>
+
+                <button class="btn btn-danger" ng-disabled="!selectCAT" ng-click="unpublish_qstns()"><span class="icon glyphicon glyphicon-remove"></span> Unpublish</button>
+            </div>
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                    	<th></th>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Status</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Created Date</th>
+                        <th>Options</th>
+                        <th>Updated Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat=" each in qstnData | filter:search ">
+                        <td>
+                            <input type="checkbox" ng-change="selectQstn(chk,each)" ng-model="chk.select"> {{selecteach}}
+                        </td>
+                        <td>{{each.question}}</td>
+                        <td>{{each.answer}}</td>
+                        <td>{{each.status}}</td>
+                        <td>{{each.class}}</td>
+                        <td>{{each.subject}}</td>
+                        <td>{{each.createdDate}}</td>
+                        <td>{{each.options}}</td>
+                        <td>{{each.updatedDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <paging ng-if="!classPagination && !subjectPagination" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="DoCtrlPagingAct(page, pageSize, total,selCount)">
+            </paging>
+            <paging ng-if="classPagination && !subjectPagination" class="small" page="currentPageClassQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="classQstn(page, pageSize, total,selCount)">
+            </paging>
+            <paging ng-if="subjectPagination && !classPagination" class="small" page="currentPageSubQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="subQstn(page, pageSize, total,selCount)">
+            </paging>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-5">
+        <div class="row">
+        	<div class="col-sm-5">
+        		<label for="class">Class based user table</label>
+                    <select ng-change="whichClassUser(cl)" ng-model="cl" class="form-control">
+                        <option ng-repeat="cc in class" value="{{cc}}">{{cc}}</option>
+                    </select>
+        	</div>
+        </div>
+            <div class="form-group" ng-if="classUserPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selectingClass(valUsr)" ng-model="valUsr" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+
+            <div class="form-group" ng-if="!classUserPagination">
+                <label for="class">Docs per page</label>
+                <select ng-change="selecting(val)" ng-model="val" class="form-control">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div>
+                <button class="btn btn-warning" ng-disabled="!selectUSR" ng-click="edit_user()"><span class="icon glyphicon glyphicon-edit"></span> Edit</button>
+                <button class="btn btn-danger" ng-disabled="!selectUSR" ng-click="del_user()"><span class="icon glyphicon glyphicon-trash"></span> Delete</button>
+            </div>
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat=" each in userData | filter:search ">
+                        <td>
+                            <input type="checkbox" ng-change="selectUser(chk,each)" ng-model="chk.sel"> {{selecteach}}
+                        </td>
+                        <td>{{each.name}}</td>
+                        <td>{{each.username}}</td>
+                        <td>{{each.class}}</td>
+                        <td>{{each.section}}</td>
+                        <td>{{each.address}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <paging ng-if="!classUserPagination" class="small" page="cPage" page-size="pSize" total="tot" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userPaging(page, pSize, tot)">
+            </paging>
+
+             <paging ng-if="classUserPagination" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="userClassPaging(page, pageSize, total)">
+            </paging>
+        </div>
+    </div>
+</div>
+<!-- for editing qstn -->
+<div class="container">
+    <modal title="Edit Question" visible="showQstnEditModal">
+        <form role="form" ng-submit="qstnEditor(editQstn)">
+            <div class="form-group">
+                <label for="question">Question</label>
+                <textarea ng-model="editQstn.question" type="text" class="form-control" placeholder="Enter Question"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="options">Options</label>
+                <input ng-model="editQstn.options" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="options">Answer</label>
+                <input ng-model="editQstn.answer" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="class">Class</label>
+                <input ng-model="editQstn.class" class="form-control" id="status" placeholder="Class" />
+            </div>
+            <div class="form-group">
+                <label for="class">Subject</label>
+                <input ng-model="editQstn.subject" class="form-control" id="status" placeholder="Subject" />
+            </div>
+            <div class="form-group">
+                <label for="class">Status</label>
+                <select name="status" ng-model="editQstn.status" class="form-control" id="status" placeholder="Status" required>
+                    <option value="">Please Select Status</option>
+                    <option ng-repeat="x in stat" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </modal>
+</div>
+<!-- for editing user -->
+<div class="container">
+    <modal title="Edit user" visible="showUserEditModal">
+        <form role="form" ng-submit="userEditor(editUser)">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input ng-model="editUser.name" type="text" class="form-control" placeholder="Enter the name" />
+            </div>
+            <div class="form-group">
+                <label for="options">Username</label>
+                <input ng-model="editUser.username" class="form-control" placeholder="Enter the username" />
+            </div>
+            <div class="form-group">
+                <label for="options">Role</label>
+                <select name="role" ng-model="editUser.role" class="form-control" id="role" placeholder="role" required>
+                    <option value="">Please Select Role</option>
+                    <option ng-repeat="x in whatrole" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="options">Class</label>
+                <select name="status" ng-model="editUser.class" class="form-control" id="class" placeholder="Status" required>
+                    <option value="">Please Select Class</option>
+                    <option ng-repeat="x in class" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="section">Section</label>
+                <input ng-model="editUser.section" class="form-control" id="section" placeholder="Add section" />
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input ng-model="editUser.address" class="form-control" id="address" placeholder="Add the address" />
+            </div>
+            <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </modal>
+</div>
+<div>

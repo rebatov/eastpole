@@ -58,3 +58,22 @@ h1,h2,h3 {
     cursor: pointer;
     float: right;
 }
+.seven{
+  font-family: 'Segment7Standard';
+   font-weight: large;
+   font-size: 40px;
+   float: left;
+   font-style: italic;
+}
+.opt{
+  padding-right:25px;
+}
+.val{
+  margin-right:5px !important;
+}
+.panel{
+  background:transparent !important;
+}
+.panel-info {
+    border-color: whitesmoke !important;
+}

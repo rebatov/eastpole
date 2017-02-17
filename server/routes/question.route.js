@@ -48,7 +48,7 @@ router.post('/delete', function(req, res) {
                 "message": "Not logged in"
             })
         } else {
-        	console.log(req.body)
+            console.log(req.body)
             qstnController.delete(req.body, function(err, question) {
                 if (err)
                     res.json({
@@ -251,12 +251,12 @@ router.post('/getClass/', function(req, res) {
                         documents: result1.documents,
                         count: result2
                     })
-                   res.status(200).send(ob);
+                    res.status(200).send(ob);
                 }
             })
 
         }
-        
+
     });
 });
 
@@ -285,12 +285,12 @@ router.post('/getSubject/', function(req, res) {
                         documents: result1.documents,
                         count: result2
                     })
-                   res.status(200).send(o);
+                    res.status(200).send(o);
                 }
             })
 
         }
-        
+
     });
 });
 
@@ -375,12 +375,30 @@ router.post('/listNeed/', function(req, res) {
                         documents: result1.documents,
                         count: result2
                     })
-                   res.status(200).send(obj);
+                    res.status(200).send(obj);
                 }
             })
 
         }
-        
+
     });
+});
+
+
+router.get('/count', function(req, res) {
+    qstnController.getCount(req.body,function(err, questions) {
+        if (err)
+            res.json({
+                "status": 500,
+                "message": "Internal server error",
+                "data": null
+            });
+        else
+            res.json({
+                "status": 200,
+                "message": "Success",
+                "data": questions
+            });
+    })
 });
 module.exports = router;

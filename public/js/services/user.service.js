@@ -39,5 +39,9 @@ angular.module('userService', [])
         UserFactory.class = function(obj){
         	return $http.post('/user/getClass/',obj)
         }
+        UserFactory.count = function(){
+          return $http.get('/user/count/')
+        }
+
         return UserFactory;
     });

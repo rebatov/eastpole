@@ -15,7 +15,7 @@ var temp_user;
 angular.module('mainCtrl', ['angularModalService', 'mymodal']).
 controller('MainController', function(Modal,
     $rootScope, $location, Auth, $scope,
-    $http, ModalService, Question, User) {
+    $http, ModalService, Question, User,Result) {
     var initDoc = 3,
         initPage = 1;
     $scope.selCount = initDoc;
@@ -35,8 +35,8 @@ user paging
             $scope.loadhomepage=function(){
                 console.log('test1');
                 Auth.getUser();
-                
-                
+
+
             }*/
 
 
@@ -684,5 +684,9 @@ user paging
         })
 
     }
+
+
+
+
 
 });

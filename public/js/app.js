@@ -9,7 +9,7 @@
 angular.module('app',['ngRoute','mainCtrl','appRoutes','authService',
 				'angularModalService','mymodal',
 				'qstnService','userService','stuCtrl',
-				'bw.paging','resultService','resultCtrl'
+				'bw.paging','resultService','resultCtrl','dashCtrl'
 	])
 // .config(function($httpProvider) {
 //  	$httpProvider.interceptors.push('AuthInterceptor');

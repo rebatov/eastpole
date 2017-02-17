@@ -209,7 +209,7 @@ qstnController.prototype.exam = function(obj,callback){
     Question.find({
         class:obj.class,
         subject:obj.subject,
-        status:"published" 
+        status:"published"
     }, function(err, questions) {
         if (err)
             callback(err);

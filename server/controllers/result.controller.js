@@ -115,7 +115,7 @@ resultController.prototype.getResultByClassAndSubject = function(obj, callback) 
 }
 
 
-resultController.prototype.getCount = function(obj, callback) {
+resultController.prototype.getCount = function(obj,callback) {
     Result.count({}, function(err, result) {
         if (err) {
             callback(err)

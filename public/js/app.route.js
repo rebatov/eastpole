@@ -12,13 +12,13 @@ angular.module('appRoutes' , ['ngRoute'])
 	$routeProvider.
  when('/',{
 
-        
+
 //        index has dependencies, scripts,routes, and home is main template
          templateUrl: 'templates/dashboard.html',
           resolve:{
         /*To check whether the user has access with token*/
-        function($location,AuthToken){ 
-            if(!AuthToken.getTokenAndRole().token || AuthToken.getTokenAndRole().token==undefined){ 
+        function($location,AuthToken){
+            if(!AuthToken.getTokenAndRole().token || AuthToken.getTokenAndRole().token==undefined){
                  console.log('TOKEN')
                  $location.path('/login');
             }
@@ -49,12 +49,32 @@ angular.module('appRoutes' , ['ngRoute'])
             }
          }
     }).
+		when('/users',{
+		 templateUrl: 'templates/users.html',
+		 resolve:{
+				function($location,AuthToken){
+						if(AuthToken.getTokenAndRole().role !== "admin"){
+						$location.path('/')
+				}
+				}
+		 }
+}).
+when('/questions',{
+ templateUrl: 'templates/questions.html',
+ resolve:{
+		function($location,AuthToken){
+				if(AuthToken.getTokenAndRole().role !== "admin"){
+				$location.path('/')
+		}
+		}
+ }
+}).
 	 when('/login',{
          templateUrl: 'templates/login.html',
                    resolve:{
         /*To check whether the user has access with token*/
-        function($location,AuthToken){ 
-            if(AuthToken.getTokenAndRole().token!=undefined){ 
+        function($location,AuthToken){
+            if(AuthToken.getTokenAndRole().token!=undefined){
                 console.log('TOKEN')
                  $location.path('/');
             }

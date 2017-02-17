@@ -197,4 +197,22 @@ router.post('/getClass/', function(req, res) {
     });
 });
 
+router.get('/count',function(req,res){
+  userController.getCount(req.body,function(err, user) {
+      if (err)
+          res.json({
+              "status": 500,
+              "message": "Internal server error",
+              "data": null
+          })
+      else {
+          res.json({
+              "status": 200,
+              "message": "Success",
+              "data": user
+          })
+      }
+  });
+})
+
 module.exports = router;

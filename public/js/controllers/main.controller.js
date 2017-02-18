@@ -15,19 +15,19 @@ var temp_user;
 angular.module('mainCtrl', ['angularModalService', 'mymodal']).
 controller('MainController', function(Modal,
     $rootScope, $location, Auth, $scope,
-    $http, ModalService, Question, User,Result) {
+    $http, ModalService, Question, User, Result) {
 
 
-// time check
-let hr = new Date().getHours();
-if(hr >= 12 && hr <= 17)
-  $scope.welcome = "Good Afternoon!!"
-if(hr > 17 && hr <=23 )
-  $scope.welcome = "Good Night!!"
-if(hr == 0)
-  $scope.welcome="Boo... it's midnight!! "
-if(hr > 0 && hr <=11)
-  $scope.welcome = "Good Morning!!"
+    // time check
+    let hr = new Date().getHours();
+    if (hr >= 12 && hr <= 17)
+        $scope.welcome = "Good Afternoon!!"
+    if (hr > 17 && hr <= 23)
+        $scope.welcome = "Good Night!!"
+    if (hr == 0)
+        $scope.welcome = "Boo... it's midnight!! "
+    if (hr > 0 && hr <= 11)
+        $scope.welcome = "Good Morning!!"
     var initDoc = 3,
         initPage = 1;
     $scope.selCount = initDoc;
@@ -81,24 +81,24 @@ user paging
         success(function(success) {
             console.log(success)
             var o = stringifier(success.documents)
-                // success.documents.forEach(function(dat, index) {
-                //         dat.options.forEach(function(x, i) {
-                //             stringify += x + ",";
-                //         })
-                //         stringify = stringify.slice(0, -1);
-                //         console.log(stringify)
-                //         dat.options = stringify;
-                //         stringify = "";
-                //     })
-                // success.data.options = stringify
+            // success.documents.forEach(function(dat, index) {
+            //         dat.options.forEach(function(x, i) {
+            //             stringify += x + ",";
+            //         })
+            //         stringify = stringify.slice(0, -1);
+            //         console.log(stringify)
+            //         dat.options = stringify;
+            //         stringify = "";
+            //     })
+            // success.data.options = stringify
             $scope.qstnData = o;
             $scope.total = success.count
             console.log($scope.total)
         }).
         error(function(err) {
-                console.log(err);
-            })
-            // for users
+            console.log(err);
+        })
+        // for users
         var usr = {}
         usr.docsPerPage = initDoc
         usr.pageNumber = 1
@@ -174,7 +174,7 @@ user paging
                     $location.path('/');
                 }
                 // $scope.Username = global;
-                else{
+                else {
                     pointer.error = data.message;
                     console.log(pointer.error)
                 }
@@ -185,15 +185,32 @@ user paging
 
     pointer.doLogout = function() {
         console.log("LOGOUT")
-        Auth.logout();
-        $location.path('/logout');
+        swal({
+                title: "Are you sure?",
+                text: "You are about to end the session",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, I understand!",
+                cancelButtonText: "No, cancel!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    Auth.logout();
+                    location.reload('/');
+                } else {
+                    swal("Cancelled", "You can continue", "success");
+                }
+            });
         //        window.location.reload();
     }
 
     /*
     signup
     */
-    $scope.signup=function(){
+    $scope.signup = function() {
         Modal.toggleModal();
         $scope.showaddUserModal = Modal.showModal;
         console.log($scope.showaddUserModal)
@@ -228,10 +245,10 @@ user paging
                 location.reload()
             }).
         error(function(err) {
-                console.log(err);
-                location.reload()
-            })
-            // location.reload();
+            console.log(err);
+            location.reload()
+        })
+        // location.reload();
     }
 
 
@@ -262,33 +279,39 @@ user paging
     */
     $scope.selectall = function(chkbox) {
 
-            if (chkbox.select) {
-                console.log('true');
-                $scope.chk = { "select": true }
-                for (var i = 0; i < $scope.qstnData.length; i++) {
-                    idarray.push($scope.qstnData[i]._id);
-                    $scope.selectCAT = true;
-
-                };
-                console.log(idarray);
-
-            } else {
-                $scope.chk = { "select": false }
-                idarray = [];
-                $scope.selectCAT = false;
+        if (chkbox.select) {
+            console.log('true');
+            $scope.chk = {
+                "select": true
             }
+            for (var i = 0; i < $scope.qstnData.length; i++) {
+                idarray.push($scope.qstnData[i]._id);
+                $scope.selectCAT = true;
 
+            };
+            console.log(idarray);
 
+        } else {
+            $scope.chk = {
+                "select": false
+            }
+            idarray = [];
+            $scope.selectCAT = false;
         }
-        /*
-        select one
-        */
+
+
+    }
+    /*
+    select one
+    */
 
     $scope.selectQstn = function(chk, each) {
 
         if (chk.select) {
             temp_qstn = each;
-            if (idarray.indexOf(each._id) == -1) { idarray.push(each._id); }
+            if (idarray.indexOf(each._id) == -1) {
+                idarray.push(each._id);
+            }
             console.log(idarray);
         } else {
 
@@ -297,7 +320,9 @@ user paging
         }
         console.log(idarray.length);
         if (idarray.length > 0) $scope.selectCAT = true;
-        else { $scope.selectCAT = false; }
+        else {
+            $scope.selectCAT = false;
+        }
 
 
     }
@@ -373,7 +398,9 @@ user paging
 
         if (chk.sel) {
             temp_user = each;
-            if (usridarray.indexOf(each._id) == -1) { usridarray.push(each._id); }
+            if (usridarray.indexOf(each._id) == -1) {
+                usridarray.push(each._id);
+            }
             console.log(usridarray);
         } else {
 
@@ -467,15 +494,15 @@ user paging
         obj.pageNumber = 1
         Question.paging(obj).
         success(function(success) {
-                console.log(success)
-                var o = stringifier(success.documents)
-                $scope.qstnData = o
-                $scope.total = success.count
-                $scope.pageSize = obj.docsPerPage
-            }).error(function(err) {
-                console.log(err);
-            })
-            // console.log($scope.value)
+            console.log(success)
+            var o = stringifier(success.documents)
+            $scope.qstnData = o
+            $scope.total = success.count
+            $scope.pageSize = obj.docsPerPage
+        }).error(function(err) {
+            console.log(err);
+        })
+        // console.log($scope.value)
     }
 
     /*
@@ -507,14 +534,14 @@ user paging
         obj.pageNumber = 1
         User.paging(obj).
         success(function(success) {
-                console.log(success)
-                $scope.userData = success.documents
-                $scope.tot = success.count
-                $scope.pSize = obj.docsPerPage
-            }).error(function(err) {
-                console.log(err);
-            })
-            // console.log($scope.value)
+            console.log(success)
+            $scope.userData = success.documents
+            $scope.tot = success.count
+            $scope.pSize = obj.docsPerPage
+        }).error(function(err) {
+            console.log(err);
+        })
+        // console.log($scope.value)
     }
 
 
@@ -561,26 +588,26 @@ user paging
 
 
     $scope.selectorQstnClass = function(value) {
-            console.log(value)
-            var obj = {};
-            obj.docsPerPage = parseInt(value);
-            obj.pageNumber = 1;
-            obj.class = $scope.whichGrade
-            Question.class(obj).
-            success(function(success) {
-                    console.log(success)
-                    var o = stringifier(success.documents)
-                    $scope.qstnData = o
-                    $scope.total = success.count
-                    $scope.pageSize = obj.docsPerPage
-                }).error(function(err) {
-                    console.log(err);
-                })
-                // console.log($scope.value)
-        }
-        /*
-        sub wise filtering
-        */
+        console.log(value)
+        var obj = {};
+        obj.docsPerPage = parseInt(value);
+        obj.pageNumber = 1;
+        obj.class = $scope.whichGrade
+        Question.class(obj).
+        success(function(success) {
+            console.log(success)
+            var o = stringifier(success.documents)
+            $scope.qstnData = o
+            $scope.total = success.count
+            $scope.pageSize = obj.docsPerPage
+        }).error(function(err) {
+            console.log(err);
+        })
+        // console.log($scope.value)
+    }
+    /*
+    sub wise filtering
+    */
     $scope.valSQ = 3
     $scope.whichSubject = function(sub) {
         $scope.classPagination = false;
@@ -627,15 +654,15 @@ user paging
         obj.subject = $scope.whichSub
         Question.subject(obj).
         success(function(success) {
-                console.log(success)
-                var o = stringifier(success.documents)
-                $scope.qstnData = o
-                $scope.total = success.count
-                $scope.pageSize = obj.docsPerPage
-            }).error(function(err) {
-                console.log(err);
-            })
-            // console.log($scope.value)
+            console.log(success)
+            var o = stringifier(success.documents)
+            $scope.qstnData = o
+            $scope.total = success.count
+            $scope.pageSize = obj.docsPerPage
+        }).error(function(err) {
+            console.log(err);
+        })
+        // console.log($scope.value)
     }
 
 
@@ -669,14 +696,14 @@ user paging
         obj.class = $scope.whichGrd
         User.class(obj).
         success(function(success) {
-                console.log(success)
-                $scope.userData = success.documents
-                $scope.total = success.count
-                $scope.pageSize = obj.docsPerPage
-            }).error(function(err) {
-                console.log(err);
-            })
-            // console.log($scope.value)
+            console.log(success)
+            $scope.userData = success.documents
+            $scope.total = success.count
+            $scope.pageSize = obj.docsPerPage
+        }).error(function(err) {
+            console.log(err);
+        })
+        // console.log($scope.value)
     }
 
     $scope.userClassPaging = function(page, pageSize, total) {

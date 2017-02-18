@@ -7,7 +7,7 @@
 
 'use strict';
 angular.module('stuCtrl', []).
-controller('StudentController', function($scope, $rootScope, 
+controller('StudentController', function($scope, $rootScope,
     $location,Auth, User, Question
 ) {
     var reqObj = {
@@ -29,6 +29,10 @@ controller('StudentController', function($scope, $rootScope,
                     $scope.class = success.data[0].class
                     $scope.term = success.data[0].term
                     $scope.qstns = success.data
+                    success.data.forEach(function(key,index){
+                      console.log(key,index)
+                      reqarray.push({_id:key._id,answer:null})
+                    })
                 }).error(function(err) {
                     console.log(err);
                 })
@@ -40,14 +44,24 @@ controller('StudentController', function($scope, $rootScope,
 
 
     $scope.checkAnswer = function(x, y) {
-        console.log(x, y)
-        reqObj._id = y._id
-        reqObj.answer = x
-        pusher(reqObj)
+        console.log(x, y,reqarray)
         reqObj = {
-            "_id": null,
-            "answer": null
+          "_id": y._id,
+          "answer": x
         }
+        var pos = reqarray.map(function(e) { return e._id; }).indexOf(y._id);
+        console.log(pos)
+        reqarray[pos].answer = x
+        // reqarray[reqarray.indexOf(y._id)].answer = x
+        // pusher(reqObj)
+        // reqarray.forEach(function(key,index){
+        //   if (key._id == reqObj._id){
+        //     key.answer = reqObj.answer
+        //   }
+        //   else{
+        //     key.answer = reqObj.answer
+        //   }
+        // })
     }
 
     $scope.submitQstns = function() {
@@ -59,24 +73,48 @@ controller('StudentController', function($scope, $rootScope,
             class:$scope.class,
             term:$scope.term
         }
-        Question.result(obj).
-        success(function(success){
-        	console.log(success)
-        }).error(function(err){
-        	console.log(err)
-        })
+        swal({
+                title: "Are you sure?",
+                text: "You are about submit the paper",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, I understand!",
+                cancelButtonText: "No, cancel!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                  console.log('obj',obj)
+                  Question.result(obj).
+                  success(function(success){
+                    console.log(success)
+                    swal("Thanks for your patience", "We'll notify you further", "success");
+                    Auth.logout();
+                    location.reload('/');
+                  }).error(function(err){
+                    console.log(err)
+                  })
+                } else {
+                    swal("Cancelled", "You can continue", "success");
+                }
+            });
     }
 
     /*
 	function pusher
     */
     function pusher(obj) {
-        var found = reqarray.some(function(el) {
-        	console.log(el)
+        var found = reqarray.some(function(el,x) {
+        	console.log(el,obj,x,reqarray)
+          reqarray[x].answer = obj.answer
+          reqarray[x]._id=obj._id
             return el._id === obj._id;
         });
         if (!found) {
             reqarray.push({ _id: obj._id, answer: obj.answer });
+            console.log('reqarray',reqarray);
         }
     }
 

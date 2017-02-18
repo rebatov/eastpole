@@ -230,6 +230,7 @@ qstnController.prototype.exam = function(obj,callback){
 
 
 qstnController.prototype.result = function(obj,callback){
+  console.log(obj)
    let arr = _.map(obj.reqarray,'_id')
    var x = new Date();
    obj.year = x.getFullYear()

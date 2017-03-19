@@ -20,6 +20,11 @@ factory('Result', function($http) {
     ResultFactory.query = function(query) {
         return $http.post('/result/query', query)
     }
+
+    ResultFactory.date = function(query) {
+        return $http.post('/result/date/', query)
+    }
+
     ResultFactory.delete = function(idarray) {
         return $http.post('/question/delete', idarray)
     }

@@ -34,47 +34,74 @@
           <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
       </form>
   </modal>
-    <modal title="Add user" visible="showaddUserModal">
-        <form role="form" ng-submit="userAdder(addUser)">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input ng-model="addUser.name" type="text" class="form-control" placeholder="Enter the name" />
-            </div>
-            <div class="form-group">
-                <label for="options">Username</label>
-                <input ng-model="addUser.username" class="form-control" placeholder="Enter the username" />
-            </div>
-            <div class="form-group">
-                <label for="options">Password</label>
-                <input type="password" ng-model="addUser.password" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="options">Retype Password</label>
-                <input type="password" ng-model="addUser.rePassword" class="form-control" />
-            </div>
-            <div class="form-group">
-                <select name="role" ng-model="addUser.role" class="form-control" id="role" placeholder="role" required>
-                    <option value="">Please Select Role</option>
-                    <option ng-repeat="x in whatrole" value="{{x}}">{{x}}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="status" ng-model="addUser.class" class="form-control" id="class" placeholder="Status" required>
-                    <option value="">Please Select Class</option>
-                    <option ng-repeat="x in class" value="{{x}}">{{x}}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="section">Section</label>
-                <input ng-model="addUser.section" class="form-control" id="section" placeholder="Add section" />
-            </div>
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input ng-model="addUser.address" class="form-control" id="address" placeholder="Add the address" />
-            </div>
-            <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
-        </form>
-    </modal>
+  <div class="container">
+      <modal title="Add user" visible="showaddUserModal">
+          <form role="form" ng-submit="userAdder(addUser)" name="userAddForm" id= "userAddForm">
+              <div class="form-group">
+                  <label for="name">Name</label>
+                  <input ng-model="addUser.name" type="text" class="form-control" placeholder="Enter the name" name="name" required/>
+              </div>
+              <div ng-show="userAddForm.name.$error.required && !userAddForm.name.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Name required</strong>
+              </div>
+              <div class="form-group">
+                  <label for="options">Username</label>
+                  <input ng-model="addUser.username" class="form-control" placeholder="Enter the username" name="username" required/>
+              </div>
+              <div ng-show="userAddForm.username.$error.required && !userAddForm.username.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Username required</strong>
+              </div>
+              <div class="form-group">
+                  <label for="options">Password</label>
+                  <input type="password" ng-model="addUser.password" class="form-control" name="pwd" required/>
+              </div>
+              <div ng-show="userAddForm.pwd.$error.required && !userAddForm.pwd.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Password required</strong>
+              </div>
+              <div class="form-group">
+                  <label for="options">Retype Password</label>
+                  <input type="password" ng-model="addUser.rePassword" class="form-control" name="re" required/>
+              </div>
+              <div ng-show="userAddForm.re.$error.required && !userAddForm.re.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Retyping password is required</strong>
+              </div>
+              <div class="form-group">
+                  <label for="options">Roll number</label>
+                  <input ng-model="addUser.roll" class="form-control" name="roll" required/>
+              </div>
+              <div ng-show="userAddForm.roll.$error.required && !userAddForm.roll.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Roll number is required</strong>
+              </div>
+              <div class="form-group">
+                  <select name="role" ng-model="addUser.role" class="form-control" id="role" placeholder="role" required>
+                      <option value="">Please Select Role</option>
+                      <option ng-repeat="x in whatrole" value="{{x}}">{{x}}</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <select name="status" ng-model="addUser.class" class="form-control" id="class" placeholder="Status" required>
+                      <option value="">Please Select Class</option>
+                      <option ng-repeat="x in class" value="{{x}}">{{x}}</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="section">Section</label>
+                  <input ng-model="addUser.section" class="form-control" id="section" placeholder="Add section" name="section" required/>
+              </div>
+              <div ng-show="userAddForm.section.$error.required && !userAddForm.section.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Section required</strong>
+              </div>
+              <div class="form-group">
+                  <label for="address">Address</label>
+                  <input ng-model="addUser.address" class="form-control" id="address" placeholder="Add the address" name="addr" required/>
+              </div>
+              <div ng-show="userAddForm.addr.$error.required && !userAddForm.addr.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Address required</strong>
+              </div>
+              <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
+          </form>
+      </modal>
+  </div>
 <div ng-init="preload()">
         		<label for="class">Class based user table</label>
                     <select ng-change="whichClassUser(cl)" ng-model="cl" class="form-control">

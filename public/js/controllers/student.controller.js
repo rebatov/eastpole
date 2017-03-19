@@ -32,6 +32,12 @@ controller('StudentController', function($scope, $rootScope,
                     success.data.forEach(function(key,index){
                       console.log(key,index)
                       reqarray.push({_id:key._id,answer:null})
+                      Question.getSubject().success(function(data){
+                        console.log(data)
+                        if(data.status == 200){
+                          $scope.subjects = data.data;
+                        }
+                      })
                     })
                 }).error(function(err) {
                     console.log(err);
@@ -40,6 +46,7 @@ controller('StudentController', function($scope, $rootScope,
         ).error(function(err) {
             console.log(err);
         })
+
     }
 
 
@@ -64,14 +71,15 @@ controller('StudentController', function($scope, $rootScope,
         // })
     }
 
-    $scope.submitQstns = function() {
+    $scope.submitQstns = function(data) {
         console.log(reqarray)
+        if(data){
         var obj = {
         	reqarray:reqarray,
         	username:$scope.user,
-        	subject:$scope.subject,
+        	subject:data.subject,
             class:$scope.class,
-            term:$scope.term
+            term:$scope.term,
         }
         swal({
                 title: "Are you sure?",
@@ -100,6 +108,10 @@ controller('StudentController', function($scope, $rootScope,
                     swal("Cancelled", "You can continue", "success");
                 }
             });
+          }
+          else{
+            alert("Choose the examination subject")
+          }
     }
 
     /*

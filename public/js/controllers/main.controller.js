@@ -12,10 +12,10 @@ var idarray = [];
 var usridarray = [];
 var temp_user;
 
-angular.module('mainCtrl', ['angularModalService', 'mymodal']).
+let app = angular.module('mainCtrl', ['angularModalService', 'mymodal']).
 controller('MainController', function(Modal,
     $rootScope, $location, Auth, $scope,
-    $http, ModalService, Question, User, Result) {
+    $http, ModalService, Question, User, Result,Upload, $timeout) {
 
 
     // time check
@@ -111,11 +111,19 @@ user paging
         error(function(err) {
             console.log(err)
         })
+        Question.getSubject().success(function(success){
+          console.log(success)
+          $scope.subject = success.data;
+        })
     }
 
     $scope.whatrole = ["admin", "student"]
     $scope.class = []
-    $scope.subject = ["gk", "Maths", "English"]
+    Question.getSubject().success(function(success){
+      console.log(success)
+      $scope.subject = success.data;
+    })
+    // $scope.subject = ["gk", "Maths", "English","n"]
     for (var i = 1; i <= 12; i++) {
         $scope.class.push(i);
     }
@@ -237,19 +245,25 @@ user paging
     $scope.qstnAdder = function(obj) {
         let arr = [];
         console.log(obj);
+        if(obj.options.indexOf(',') == -1){
+          alert("Options are comma separated!")
+          location.reload()
+        }
+        else{
         arr = obj.options.split(',')
         obj.options = arr;
         Question.create(obj).success(
             function(success) {
                 console.log(success)
-                location.reload()
+                location.reload();
             }).
         error(function(err) {
             console.log(err);
-            location.reload()
+            location.reload();
         })
         // location.reload();
     }
+  }
 
 
 
@@ -260,17 +274,29 @@ user paging
     }
 
     $scope.userAdder = function(obj) {
-        console.log(obj);
-        if (obj.password === obj.rePassword) {
+        console.log(obj,Object.keys(obj).length);
+        if(Object.keys(obj).length < 9){
+          alert("Form not completely filled")
+          location.reload();
+        }
+        if (Object.keys(obj).length == 9 && obj.password === obj.rePassword) {
+          console.log("8 here")
             User.create(obj).
             success(function(success) {
                 console.log(success)
+                alert(success.message)
                 $scope.nowlogin = true;
+                // location.reload();
             }).
             error(function(err) {
                 console.log(err)
                 $scope.err = true;
+                // location.reload();
             })
+        }
+        else{
+          alert("Password mismatch");
+          location.reload();
         }
     }
 
@@ -619,8 +645,8 @@ user paging
         obj.docsPerPage = initDoc;
         obj.pageNumber = 1
         Question.subject(obj).success(function(success) {
-            console.log(success)
-            $scope.qstnData = success.documents
+            console.log('sub',success)
+            $scope.qstnData = stringifier(success.documents)
             $scope.total = success.count;
             $scope.pageSize = obj.docsPerPage;
         }).error(function(err) {
@@ -723,9 +749,70 @@ user paging
         })
 
     }
+      $scope.upload = function(file) {
+        console.log(file)
+        if(file.type == "text/csv"){
+      file.upload = Upload.upload({
+        url: '/question/upload/',
+        data: {class: $scope.class,subject:$scope.sub,file: file},
+      });
+
+      file.upload.then(function (response) {
+        $timeout(function () {
+          file.result = response.data;
+        });
+      }, function (response) {
+        if (response.status > 0)
+          $scope.errorMsg = response.status + ': ' + response.data;
+      }, function (evt) {
+        // Math.min is to fix IE which reports 200% sometimes
+        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+      });
+      }
+      else{
+        swal("Filetype mismatch!", "Please upload CSV file", "error")
+      }
+    }
+
+    // multi publish
 
 
+    $scope.btnMulti = function(){
+      Modal.toggleModal();
+      $scope.showMulti = Modal.showModal;
+    }
+
+    $scope.multiStat = function(mul){
+      console.log(mul)
+      Question.multi(mul).success(function(data){
+        console.log(data)
+        if(data.status == 200){
+          swal("Successful multi status change");
+          location.reload();
+        }
+      })
+    }
 
 
-
-});
+})
+app.controller('MyCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+  // $scope.uploadtest = "voila"
+  //   $scope.upload = function(file) {
+  //   file.upload = Upload.upload({
+  //     url: '/question/upload/',
+  //     data: {username: $scope.username, file: file},
+  //   });
+  //
+  //   file.upload.then(function (response) {
+  //     $timeout(function () {
+  //       file.result = response.data;
+  //     });
+  //   }, function (response) {
+  //     if (response.status > 0)
+  //       $scope.errorMsg = response.status + ': ' + response.data;
+  //   }, function (evt) {
+  //     // Math.min is to fix IE which reports 200% sometimes
+  //     file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+  //   });
+  //   }
+}]);

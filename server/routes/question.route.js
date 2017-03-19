@@ -13,6 +13,33 @@ var Controller = require('../controllers/question.controller');
 var qstnController = new Controller();
 var Islogged = require('../utilities/loginCheck');
 var islogged = new Islogged();
+var multer = require('multer')
+let LineByLineReader = require('line-by-line');
+let subjects = require('../utilities/subject.js')
+
+router.use(function(req, res, next) { //allow cross origin requests
+    res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
+    res.header("Access-Control-Allow-Origin", "http://localhost");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+
+
+var storage = multer.diskStorage({ //multers disk storage settings
+    destination: function(req, file, cb) {
+        cb(null, 'public/uploads');
+    },
+    filename: function(req, file, cb) {
+        var datetimestamp = Date.now();
+        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+        // cb(null, datetimestamp)
+    }
+});
+
+var upload = multer({ //multer settings
+    storage: storage
+}).single('file');
 
 router.get('/get', function(req, res) {
     islogged.islogged(req, function(err, logged) {
@@ -386,7 +413,7 @@ router.post('/listNeed/', function(req, res) {
 
 
 router.get('/count', function(req, res) {
-    qstnController.getCount(req.body,function(err, questions) {
+    qstnController.getCount(req.body, function(err, questions) {
         if (err)
             res.json({
                 "status": 500,
@@ -401,4 +428,102 @@ router.get('/count', function(req, res) {
             });
     })
 });
+
+
+router.get('/subjects',function(req,res){
+  res.json({
+    "status":200,
+    "message":"SUCCESS",
+    "data":subjects
+  })
+})
+
+
+router.post('/multi', function(req, res) {
+    qstnController.publishClassAndSubject(req.body, function(err, rslt) {
+        if (err) {
+            res.json({
+                "status": 500,
+                "message": err
+            })
+        } else {
+            res.json({
+                "status": 200,
+                "message": "SUCCESS",
+                "data": rslt
+            })
+        }
+    })
+})
+
+
+router.post('/upload', function(req, res) {
+    upload(req, res, function(err, rslt) {
+        if (err) {
+            res.json({
+                "status": 500,
+                "message": err
+            })
+        } else {
+            console.log(req.body, req.file)
+            let lr = new LineByLineReader(req.file.path);
+            const csvFilePath = '<path to csv file>'
+            const csv = require('csvtojson')
+            let arr = [];
+            csv()
+                .fromFile(req.file.path)
+                .on('json', (jsonObj) => {
+                    jsonObj.options = jsonObj.options.split('@')
+                    console.log(jsonObj)
+                    arr.push(jsonObj);
+                    // combine csv header row and csv line to a json object
+                    // jsonObj.a ==> 1 or 4
+                })
+                .on('done', (error) => {
+                    // console.log('end', arr)
+                    arr = arr.map((element) => {
+                        element.subject  = req.body.subject;
+                        element.class  = req.body.class;
+                        return element;
+                    });
+                    console.log(arr)
+                    qstnController.bulk(arr, function(err, rslt) {
+                        if (err) {
+                            res.json({
+                                "status": 500,
+                                "message": "Question creation error"
+                            })
+                        } else {
+
+                            res.json({
+                                "status": 200,
+                                "message": "success",
+                                "file": req.file,
+                                "data": rslt
+                            })
+                        }
+                    })
+                })
+            // lr.on('error', function(err) {
+            //     // 'err' contains error object
+            // });
+            //
+            // lr.on('line', function(line) {
+            //     // 'line' contains the current line without the trailing newline character.
+            //     console.log(line)
+            //
+            // });
+            //
+            // lr.on('end', function() {
+            //     // All lines are read, file is closed now.
+            //     res.json({
+            //         "status": 200,
+            //         "message": req.body,
+            //         "file": req.file
+            //     })
+            // });
+        }
+    })
+})
+
 module.exports = router;

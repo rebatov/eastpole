@@ -1,81 +1,91 @@
 <div class="col-sm-9" ng-controller="MainController">
     <modal title="Add questions" visible="showaddQstnModal">
-        <form role="form" ng-submit="qstnAdder(addQstn)">
+        <form role="form" ng-submit="qstnAdder(addQstn)" name="qstnForm" id="qstnForm">
             <div class="form-group">
                 <label for="question">Question</label>
-                <textarea ng-model="addQstn.question" type="text" class="form-control" placeholder="Enter Question"></textarea>
+                <textarea ng-model="addQstn.question" type="text" class="form-control" name="qstn" placeholder="Enter Question" required></textarea>
+            </div>
+            <div ng-show="qstnForm.qstn.$error.required && !qstnForm.qstn.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Question required</strong>
             </div>
             <div class="form-group">
-                <label for="options">Options</label>
-                <input ng-model="addQstn.options" class="form-control" />
+                <label for="options">Options (E.g. 25,78,83,99)</label>
+                <input ng-model="addQstn.options" class="form-control" name="opt" required />
+            </div>
+            <div ng-show="qstnForm.opt.$error.required && !qstnForm.opt.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Options required</strong>
             </div>
             <div class="form-group">
                 <label for="options">Answer</label>
-                <input ng-model="addQstn.answer" class="form-control" />
+                <input ng-model="addQstn.answer" class="form-control" name="ans" required />
+            </div>
+            <div ng-show="qstnForm.ans.$error.required && !qstnForm.ans.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Answer required</strong>
             </div>
             <div class="form-group">
-                <label for="class">Class</label>
-                <input ng-model="addQstn.class" class="form-control" id="status" placeholder="Class" />
+                <select name="status" ng-model="addQstn.class" class="form-control" id="class" name="class" placeholder="Status" required>
+                    <option value="">Please Select Class</option>
+                    <option ng-repeat="x in class" value="{{x}}">{{x}}</option>
+                </select>
+            </div>
+            <div ng-show="qstnForm.class.$error.required && !qstnForm.class.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Class required</strong>
             </div>
             <div class="form-group">
                 <label for="class">Subject</label>
-                <input ng-model="addQstn.subject" class="form-control" id="subject" placeholder="Subject" />
+                <input ng-model="addQstn.subject" class="form-control" id="subject" name="sub" placeholder="Subject" required />
+            </div>
+            <div ng-show="qstnForm.sub.$error.required && !qstnForm.sub.$pristine" class="alert alert-danger">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Subject required</strong>
             </div>
             <div class="form-group">
                 <label for="class">Status</label>
                 <select name="status" ng-model="addQstn.status" class="form-control" id="status" placeholder="Status" required>
-                    <option value="">Please Select Status</option>
+                    <!-- <option value="">Please Select Status</option> -->
                     <option ng-repeat="x in stat" value="{{x}}">{{x}}</option>
                 </select>
             </div>
             <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
         </form>
     </modal>
-<div class="container">
-    <modal title="Add user" visible="showaddUserModal">
-        <form role="form" ng-submit="userAdder(addUser)">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input ng-model="addUser.name" type="text" class="form-control" placeholder="Enter the name" />
-            </div>
-            <div class="form-group">
-                <label for="options">Username</label>
-                <input ng-model="addUser.username" class="form-control" placeholder="Enter the username" />
-            </div>
-            <div class="form-group">
-                <label for="options">Password</label>
-                <input type="password" ng-model="addUser.password" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="options">Retype Password</label>
-                <input type="password" ng-model="addUser.rePassword" class="form-control" />
-            </div>
-            <div class="form-group">
-                <select name="role" ng-model="addUser.role" class="form-control" id="role" placeholder="role" required>
-                    <option value="">Please Select Role</option>
-                    <option ng-repeat="x in whatrole" value="{{x}}">{{x}}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="status" ng-model="addUser.class" class="form-control" id="class" placeholder="Status" required>
-                    <option value="">Please Select Class</option>
-                    <option ng-repeat="x in class" value="{{x}}">{{x}}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="section">Section</label>
-                <input ng-model="addUser.section" class="form-control" id="section" placeholder="Add section" />
-            </div>
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input ng-model="addUser.address" class="form-control" id="address" placeholder="Add the address" />
-            </div>
-            <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
-        </form>
-    </modal>
-</div>
-<div ng-init="preload()">
-        <div class="col-md-5">
+    <div ng-init="preload()">
+      <div class="row">
+        <div class="col-md-12">
+          <button type="button" name="button" ng-click="btnMulti()">Multi status change</button>
+          <modal title="Multi status change" visible="showMulti">
+              <form role="form" ng-submit="multiStat(mul)" name="multi">
+                  <div class="form-group">
+                      <label for="class">Class</label>
+                      <input ng-model="mul.class" class="form-control" id="status" placeholder="Class" name="class" type="number" required/>
+                  </div>
+                  <div ng-show="multi.class.$error.required && !multi.class.$pristine" class="alert alert-danger">
+                      <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Class required</strong>
+                  </div>
+                  <div class="form-group">
+                      <label for="class">Subject</label>
+                      <select name="sub" ng-model="mul.subject" class="form-control" id="status" placeholder="Status" required>
+                          <!-- <option value="">Please Select Status</option> -->
+                          <option ng-repeat="y in subject" value="{{y}}">{{y}}</option>
+                      </select>
+                  <div ng-show="multi.sub.$error.required && !multi.sub.$pristine" class="alert alert-danger">
+                      <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Subject required</strong>
+                  </div>
+                  <div class="form-group">
+                      <label for="class">Status</label>
+                      <select name="status" ng-model="mul.status" class="form-control" id="status" placeholder="Status" required>
+                          <option ng-repeat="x in stat" value="{{x}}">{{x}}</option>
+                      </select>
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+          </modal>
+
+
+
+
+        </div>
+      </div>
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-sm-3">
                     <label for="class">Class based table</label>
@@ -116,7 +126,7 @@
                 </select>
             </div>
             <div>
-              <button class="btn btn-primary"  ng-click="add_questions()"><span class="icon glyphicon glyphicon-plus"></span> Add</button>
+                <button class="btn btn-primary" ng-click="add_questions()"><span class="icon glyphicon glyphicon-plus"></span> Add</button>
                 <button class="btn btn-warning" ng-disabled="!selectCAT" ng-click="edit_qstn()"><span class="icon glyphicon glyphicon-edit"></span> Edit</button>
                 <button class="btn btn-danger" ng-disabled="!selectCAT" ng-click="del_qstn()"><span class="icon glyphicon glyphicon-trash"></span> Delete</button>
 
@@ -127,8 +137,8 @@
             <table class="table table-responsive">
                 <thead>
                     <tr>
-                    	<th></th>
-                        <th>Question</th>
+                        <th></th>
+                        <th style="width:50%">Question</th>
                         <th>Answer</th>
                         <th>Status</th>
                         <th>Class</th>
@@ -154,35 +164,53 @@
                     </tr>
                 </tbody>
             </table>
-            <paging ng-if="!classPagination && !subjectPagination" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="DoCtrlPagingAct(page, pageSize, total,selCount)">
+            <paging ng-if="!classPagination && !subjectPagination" class="small" page="currentPage" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left"
+                text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="DoCtrlPagingAct(page, pageSize, total,selCount)">
             </paging>
-            <paging ng-if="classPagination && !subjectPagination" class="small" page="currentPageClassQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="classQstn(page, pageSize, total,selCount)">
+            <paging ng-if="classPagination && !subjectPagination" class="small" page="currentPageClassQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left"
+                text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="classQstn(page, pageSize, total,selCount)">
             </paging>
-            <paging ng-if="subjectPagination && !classPagination" class="small" page="currentPageSubQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left" text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="subQstn(page, pageSize, total,selCount)">
+            <paging ng-if="subjectPagination && !classPagination" class="small" page="currentPageSubQ" page-size="pageSize" total="total" show-prev-next="true" show-first-last="true" text-next-class="glyphicon glyphicon-chevron-right" text-prev-class="glyphicon glyphicon-chevron-left"
+                text-first-class="glyphicon glyphicon-backward" text-last-class="glyphicon glyphicon-forward" paging-action="subQstn(page, pageSize, total,selCount)">
             </paging>
         </div>
         <div class="container">
             <modal title="Edit Question" visible="showQstnEditModal">
-                <form role="form" ng-submit="qstnEditor(editQstn)">
+                <form role="form" ng-submit="qstnEditor(editQstn)" name="qstnEditForm">
                     <div class="form-group">
                         <label for="question">Question</label>
-                        <textarea ng-model="editQstn.question" type="text" class="form-control" placeholder="Enter Question"></textarea>
+                        <textarea ng-model="editQstn.question" type="text" class="form-control" placeholder="Enter Question" name="qstn" required></textarea>
+                    </div>
+                    <div ng-show="qstnEditForm.qstn.$error.required && !qstnEditForm.qstn.$pristine" class="alert alert-danger">
+                        <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Question required</strong>
                     </div>
                     <div class="form-group">
                         <label for="options">Options</label>
-                        <input ng-model="editQstn.options" class="form-control" />
+                        <input ng-model="editQstn.options" class="form-control" name="option" required/>
+                    </div>
+                    <div ng-show="qstnEditForm.option.$error.required && !qstnEditForm.option.$pristine" class="alert alert-danger">
+                        <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Options required</strong>
                     </div>
                     <div class="form-group">
                         <label for="options">Answer</label>
-                        <input ng-model="editQstn.answer" class="form-control" />
+                        <input ng-model="editQstn.answer" class="form-control" name="ans" required/>
+                    </div>
+                    <div ng-show="qstnEditForm.ans.$error.required && !qstnEditForm.ans.$pristine" class="alert alert-danger">
+                        <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Answer required</strong>
                     </div>
                     <div class="form-group">
                         <label for="class">Class</label>
-                        <input ng-model="editQstn.class" class="form-control" id="status" placeholder="Class" />
+                        <input ng-model="editQstn.class" class="form-control" id="status" placeholder="Class" name="class" required/>
+                    </div>
+                    <div ng-show="qstnEditForm.class.$error.required && !qstnEditForm.class.$pristine" class="alert alert-danger">
+                        <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Class required</strong>
                     </div>
                     <div class="form-group">
                         <label for="class">Subject</label>
-                        <input ng-model="editQstn.subject" class="form-control" id="status" placeholder="Subject" />
+                        <input ng-model="editQstn.subject" class="form-control" id="status" placeholder="Subject" name="sub" / required>
+                    </div>
+                    <div ng-show="qstnEditForm.sub.$error.required && !qstnEditForm.sub.$pristine" class="alert alert-danger">
+                        <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Subject required</strong>
                     </div>
                     <div class="form-group">
                         <label for="class">Status</label>
@@ -194,5 +222,34 @@
                     <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
                 </form>
             </modal>
+        </div>
+        <div class="container">
+          <h2>Multiple questions upload!</h2>
+            <form name="upForm">
+                <fieldset>
+                    <legend>Upload on form submit</legend>
+                    Class:
+                    <input type="number" ng-model="class" name="class" min="1" max="12" required>
+                    <i ng-show="upForm.class.$error.required">*required</i>
+                    Subject:
+                    <input type="text" name="subject" ng-model="sub" size="31" required>
+                    <i ng-show="upForm.subject.$error.required">*required</i>
+                    <br>CSV:
+                    <input type="file" ngf-select ng-model="csv" name="file" required ngf-model-invalid="errorFile">
+                    <i ng-show="upForm.file.$error.required">*required</i><br>
+                    <!-- <i ng-show="upForm.file.$error.maxSize">File too large -->
+          <!-- {{errorFile.size / 1000000|number:1}}MB: max 2M</i> -->
+                    <img ng-show="upForm.file.$valid" ngf-thumbnail="csv" class="thumb"> <button ng-click="csv = null" ng-show="csv">Remove</button>
+                    <br>
+                    <button ng-disabled="!upForm.$valid" ng-click="upload(csv)">Submit</button>
+                    <span class="progress" ng-show="csv.progress >= 0">
+        <div style="width:{{csv.progress}}%"
+            ng-bind="csv.progress + '%'"></div>
+      </span>
+                    <span ng-show="csv.result">Upload Successful</span>
+                    <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                </fieldset>
+                <br>
+            </form>
         </div>
       </div>

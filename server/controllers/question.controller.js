@@ -25,6 +25,20 @@ qstnController.prototype.create = function(question, callback) {
             callback(null, result);
     });
 }
+
+
+qstnController.prototype.bulk = function(array,callback){
+  Question.create(array,function(err,data){
+    if(err)
+      callback(err)
+      else{
+        callback(null,data)
+      }
+  })
+}
+
+
+
 qstnController.prototype.delete = function(obj,callback) {
     Question.remove({ _id: {$in:obj} }, function(err, questions) {
         if (err)
@@ -122,6 +136,51 @@ qstnController.prototype.publish = function(idarray,callback){
     })
 }
 
+
+qstnController.prototype.publishClassAndSubject = function(obj,callback){
+  //  console.log(idarray)
+   Question.find({class:obj.class,subject:obj.subject},function(err,data){
+     if(err)
+     callback(err)
+     else{
+       let idarray = _.map(data,'_id')
+       Question.update({_id:{$in:idarray}},
+         {$set:{status:"published"}},
+         {multi: true}
+         ,function(err,result){
+           if(err)
+           callback(err)
+           else{
+             callback(null,result)
+           }
+         })
+
+     }
+   })
+}
+
+qstnController.prototype.unpublishClassAndSubject = function(obj,callback){
+  //  console.log(idarray)
+   Question.find({class:obj.class,subject:obj.subject},function(err,data){
+     if(err)
+     callback(err)
+     else{
+       let idarray = _.map(data,'_id')
+       Question.update({_id:{$in:idarray}},
+         {$set:{status:obj.status}},
+         {multi: true}
+         ,function(err,result){
+           if(err)
+           callback(err)
+           else{
+             callback(null,result)
+           }
+         })
+
+     }
+   })
+}
+
 qstnController.prototype.unpublish = function(idarray,callback){
    Question.update({_id:{$in:idarray}},
             {$set:{status:"unpublished"}},
@@ -203,12 +262,13 @@ function findInactive(obj) {
 
 
 qstnController.prototype.exam = function(obj,callback){
+  console.log('what exam',obj)
     var responsearray = [];
-    obj.subject="gk"
+    // obj.subject="gk"
     // obj.class=obj.class.toString()
     Question.find({
         class:obj.class,
-        subject:obj.subject,
+        // subject:obj.subject,
         status:"published"
     }, function(err, questions) {
         if (err)
@@ -221,7 +281,7 @@ qstnController.prototype.exam = function(obj,callback){
             // console.log(questions[x])
             responsearray.push(questions[x])
             if(responsearray.length === questions.length){
-            callback(null,responsearray)
+            callback(null,shuffle(responsearray))
             }
         }
         }
@@ -232,6 +292,7 @@ qstnController.prototype.exam = function(obj,callback){
 qstnController.prototype.result = function(obj,callback){
   console.log(obj)
    let arr = _.map(obj.reqarray,'_id')
+   let sorted = _.sortBy(obj.reqarray,'_id');
    var x = new Date();
    obj.year = x.getFullYear()
    let score = 0;
@@ -241,8 +302,8 @@ qstnController.prototype.result = function(obj,callback){
         else{
             console.log(rslt)
             for(var each in rslt){
-                console.log(obj.reqarray[each].answer,rslt[each].answer)
-                if(obj.reqarray[each].answer === rslt[each].answer){
+                console.log('compare',sorted[each].answer,rslt[each].answer)
+                if(sorted[each].answer === rslt[each].answer){
                     score +=1;
                 }
             }
@@ -277,6 +338,35 @@ qstnController.prototype.getNeeded = function(obj,callback){
             callback(null,result)
         }
     },obj.docsPerPage,obj.pageNumber)
+}
+
+// shuffler
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+
+// sorting
+function sort(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
 }
 
 module.exports = qstnController;

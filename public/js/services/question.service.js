@@ -58,5 +58,11 @@ factory('Question', function($http) {
     QuestionFactory.count = function() {
         return $http.get('/question/count')
     }
+    QuestionFactory.getSubject = function(){
+      return $http.get('/question/subjects/')
+    }
+    QuestionFactory.multi = function(obj){
+      return $http.post('/question/multi/',obj)
+    }
     return QuestionFactory;
 });

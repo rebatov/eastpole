@@ -4,7 +4,7 @@
 * @Last Modified by:   bishal
 * @Last Modified time: 2017-02-12 17:54:02
 */
-
+/
 body {
     /*background-color: whitesmoke ! important;*/
     background-image: url(../images/abstract-1.jpg);
@@ -95,4 +95,31 @@ body > div > div.header.logo > div > span.underline > a{
 }
 .form-control{
   cursor: pointer !important;
+}
+/*
+file upload
+*/
+.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+}
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
 }

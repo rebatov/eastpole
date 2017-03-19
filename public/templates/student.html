@@ -1,5 +1,10 @@
 <div ng-controller="StudentController" ng-init="getQstns()">
     <h1>Welcome {{user}}</h1>
+    <h2>Choose your subject</h2>
+    <select name="status" ng-model="s.subject" class="form-control" required>
+        <option value="">Please Select subject</option>
+        <option ng-repeat="x in subjects" value="{{x}}">{{x}}</option>
+    </select>
     <div>
         <ol>
             <li ng-repeat="qstn in qstns">
@@ -12,6 +17,6 @@
      <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]"> -->
             </li>
         </ol>
-        <button ng-click="submitQstns()" class="btn btn-primary">Done</button>
+        <button ng-click="submitQstns(s)" class="btn btn-primary">Done</button>
     </div>
 </div>

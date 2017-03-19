@@ -206,6 +206,40 @@ router.post('/listNeed/', function(req, res) {
 });
 
 
+
+router.post('/date',function(req,res){
+  console.log(req.body)
+  var obj;
+  resultController.getResultByDate(req.body, function(err, result1) {
+      if (err) {
+        res.json({
+            "status":500,
+            "message":"Internal server error"
+        })
+      } else {
+          resultController.getCountForDate(req.body, function(err, result2) {
+              if (err) {
+                res.json({
+                    "status":500,
+                    "message":"Internal server error"
+                })
+              } else {
+                  obj = ({
+                      documents: result1.documents,
+                      count: result2
+                  })
+                  res.json({
+                    "status":200,
+                    "message":"SUCCESS",
+                    "data":obj
+                  })
+              }
+          })
+
+      }
+  });
+})
+
 router.post('/query',function(req,res){
     resultController.parseQuery(req.body,function(err,data){
         if(err){

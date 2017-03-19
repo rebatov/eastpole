@@ -20,7 +20,7 @@ controller('ResultController', function($scope, $rootScope,
         Result.get(obj).success(function(data) {
             console.log(data)
             $scope.rsltData = data.documents
-            $scope.total = 4
+            $scope.total = data.count
             $scope.pageSize = initDoc;
             $scope.ifResult = true;
         }).error(function(err) {
@@ -46,9 +46,10 @@ controller('ResultController', function($scope, $rootScope,
     $scope.DoCtrlPagingAct = function(page, pageSize, total, val) {
         console.log(page, pageSize, total, val)
         if ($scope.returner == true) {
-            console.log("returner")
-            $scope.query.docsPerPage = pageSize;
-            $scope.query.pageNumber = page;
+            console.log("returner",$scope)
+            if($scope.query){
+              $scope.query.pageNumber = page;
+              $scope.query.docsPerPage = pageSize;
             Result.query($scope.query).success(function(data) {
                 console.log(data)
                 if (data.status == 200) {
@@ -58,7 +59,22 @@ controller('ResultController', function($scope, $rootScope,
             }).error(function(err) {
                 console.log('err');
             })
-        } else {
+          }
+          else{
+            $scope.q.docsPerPage = pageSize;
+            $scope.q.pageNumber = page;
+            console.log($scope.q)
+            Result.date($scope.q).success(function(data) {
+                console.log(data)
+                if (data.status == 200) {
+                    console.log(data.data.documents)
+                    $scope.rsltData = data.data.documents
+                }
+            }).error(function(err) {
+                console.log('err');
+            })
+        }
+      }else {
             console.log("else")
             var obj = {}
             obj.docsPerPage = pageSize;
@@ -90,11 +106,32 @@ controller('ResultController', function($scope, $rootScope,
     $scope.advancedFilter = function() {
         $scope.returner = !$scope.returner;
     }
+
+    $scope.dateQuery = function(query){
+      query.docsPerPage = initDoc;
+      query.pageNumber = initPage;
+      query.date = query.date
+      $scope.q = query;
+      // $scope.query = null;
+      console.log(query)
+      Result.date($scope.q).success(function(data){
+        console.log(data)
+        if(data.status == 200){
+          $scope.rsltData = data.data.documents
+          $scope.pageSize = initDoc;
+          $scope.page = initPage;
+        }
+      }).error(function(err) {
+          alert(err);
+      })
+    }
+
     $scope.runQuery = function(query) {
-        console.log(query.subject, query.class)
+        // console.log(query.subject, query.class,query.date.getFullYear())
         query.docsPerPage = initDoc;
         query.pageNumber = initPage;
         $scope.query = query
+        $scope.q = null;
         Result.query(query).success(function(data) {
             console.log(data)
             if (data.status == 200) {

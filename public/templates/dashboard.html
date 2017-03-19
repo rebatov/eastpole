@@ -1,14 +1,17 @@
 <div class="col-sm-9" ng-controller="DashController" ng-init="counters()" ng-if="loggedInAsAdmin">
   <div class="col-sm-3">
     <h1><i class="fa fa-users" aria-hidden="true"></i></h1>
+    <p><h2>Total users</h2></p>
     <p class="seven">{{countUsers}}</p>
   </div>
   <div class="col-sm-3">
     <h1><i class="fa fa-clipboard" aria-hidden="true"></i></h1>
+    <p><h2>Total questions</h2></p>
     <p class="seven">{{countQstns}}</p>
   </div>
   <div class="col-sm-3">
     <h1><i class="fa fa-address-card-o" aria-hidden="true"></i></h1>
+    <p><h2>Total results</p></h2>
     <p class="seven">{{countRslts}}</p>
   </div>
 </div>

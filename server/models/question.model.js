@@ -10,7 +10,7 @@ var mongoose =require('mongoose');
 var Schema =  mongoose.Schema;
 var mongoosePages = require('mongoose-pages');
 var questionSchema = new Schema({
-		question:{type:String},
+		question:{type:Object},
 		options:{type:Array},
 		answer:{type:String},
 		class:{type:String},

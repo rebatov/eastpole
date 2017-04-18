@@ -43,6 +43,11 @@ var upload = multer({ //multer settings
     storage: storage
 }).single('file');
 
+
+var qUpload = multer({
+    storage: storage
+}).any()
+
 router.get('/get', function(req, res) {
     islogged.islogged(req, function(err, logged) {
         console.log(logged)
@@ -96,31 +101,116 @@ router.post('/delete', function(req, res) {
     })
 })
 router.post('/create', function(req, res) {
-    islogged.islogged(req, function(err, logged) {
-        if (logged.role != "admin") {
-            res.json({
-                "status": 500,
-                "message": "Not logged in"
-            })
+    qUpload(req, res, (err) => {
+        if (err) {
+            console.log(err)
         } else {
-            qstnController.create(req.body, function(err, question) {
-                if (err)
-                    res.json({
-                        "status": 500,
-                        "message": "Internal server error",
-                        "data": null
-                    });
-                else
-                    res.json({
-                        "status": 200,
-                        "message": "Success",
-                        "data": question
-                    });
-            })
+            if (req.files) {
+                // console.log(req.body, req.files)
+                let opt = [];
+                let obj = req.body;
+                req.files.forEach((k, i) => {
+                    // console.log(k)
+                    if (k.fieldname != 'question') {
+                        let tmp = {
+                            id: i,
+                            path: k.path,
+                            value: null
+                        };
+                        opt.push(tmp)
+                    } else {
+                        obj.question = {
+                            "value": req.body.question,
+                            "path": k.path
+                        }
+                    }
+                });
+                // console.log(opt);
+                let index = req.files.findIndex((obj => obj.fieldname === req.body.answer))
+                if (index == -1) {
+                    return res.status(500).send({
+                        status: "error",
+                        error: "No option within specified options"
+                    })
+                }
+                obj.answer = index;
+                // console.log(index)
+                obj['options'] = opt;
+                // console.log(typeof(obj.question))
+                if (typeof(obj.question) !== "object") {
+                    obj.question = {
+                        "value": req.body.question,
+                        "path": null
+                    }
+                }
+                console.log(obj);
+                create(obj);
+            } else {
+                let opt = [];
+                let obj = req.body;
+                req.body.options.forEach((k, i) => {
+                    let tmp = {
+                        id: i,
+                        path: null,
+                        value: k
+                    };
+                    opt.push(tmp)
+                });
+                let index = opt.findIndex((obj => obj.value === req.body.answer))
+                if (index == -1) {
+                    return res.status(500).send({
+                        status: "error",
+                        error: "No option within specified options"
+                    })
+                }else{
+                  req.body['answer']=index
+                }
+                obj = req.body;
+                obj['options'] = opt
+                obj.question = {
+                    "value": req.body.question,
+                    "path": null
+                }
+                create(obj);
+            }
+
+            function create(body) {
+                qstnController.create(body, function(err, question) {
+                    if (err)
+                        res.json({
+                            "status": 500,
+                            "message": "Internal server error",
+                            "data": null
+                        });
+                    else
+                        res.json({
+                            "status": 200,
+                            "message": "Success",
+                            "data": question
+                        });
+                })
+            }
         }
+
     })
 });
 
+function create(body) {
+    qstnController.create(body, function(err, question) {
+        if (err)
+            res.json({
+                "status": 500,
+                "message": "Internal server error",
+                "data": null
+            });
+        else
+            res.json({
+                "status": 200,
+                "message": "Success",
+                "data": question
+            });
+    })
+}
 
 router.post('/publish', function(req, res) {
     islogged.islogged(req, function(err, logged) {
@@ -432,12 +522,12 @@ router.get('/count', function(req, res) {
 });
 
 
-router.get('/subjects',function(req,res){
-  res.json({
-    "status":200,
-    "message":"SUCCESS",
-    "data":subjects
-  })
+router.get('/subjects', function(req, res) {
+    res.json({
+        "status": 200,
+        "message": "SUCCESS",
+        "data": subjects
+    })
 })
 
 
@@ -478,41 +568,41 @@ router.post('/upload', function(req, res) {
                 .on('json', (jsonObj) => {
                     jsonObj.options = jsonObj.options.split('@')
                     // console.log(jsonObj)
-                    if(req.body.subject !== 'nepali'){
-                      console.log(req.body.subject,'hola')
-                    jsonObj.question = encodeURI(jsonObj.question);
-                    jsonObj.answer = encodeURI(jsonObj.answer)
-                    jsonObj.options.forEach(function(key,index){
-                      jsonObj.options[index] = encodeURI(key)
-                    })
-                    // console.log(jsonObj)
-                    arr.push(jsonObj);
-                  }else{
-                    console.log(req.body.subject)
-                    console.log(jsonObj.answer)
-                    if(jsonObj.answer.length > 1){
-                      cntr ++ ;
-                      // console.log(jsonObj.question)
-                      console.log(preeti.convert_to_unicode(jsonObj.question))
-                      jsonObj.question = encodeURI(preeti.convert_to_unicode(jsonObj.question));
-                      jsonObj.answer = encodeURI(preeti.convert_to_unicode(jsonObj.answer));
-                      jsonObj.options.forEach(function(key,index){
-                        jsonObj.options[index] = encodeURI(preeti.convert_to_unicode(key))
-                      })
-                      arr.push(jsonObj);
+                    if (req.body.subject !== 'nepali') {
+                        console.log(req.body.subject, 'hola')
+                        jsonObj.question = encodeURI(jsonObj.question);
+                        jsonObj.answer = encodeURI(jsonObj.answer)
+                        jsonObj.options.forEach(function(key, index) {
+                            jsonObj.options[index] = encodeURI(key)
+                        })
+                        // console.log(jsonObj)
+                        arr.push(jsonObj);
+                    } else {
+                        console.log(req.body.subject)
+                        console.log(jsonObj.answer)
+                        if (jsonObj.answer.length > 1) {
+                            cntr++;
+                            // console.log(jsonObj.question)
+                            console.log(preeti.convert_to_unicode(jsonObj.question))
+                            jsonObj.question = encodeURI(preeti.convert_to_unicode(jsonObj.question));
+                            jsonObj.answer = encodeURI(preeti.convert_to_unicode(jsonObj.answer));
+                            jsonObj.options.forEach(function(key, index) {
+                                jsonObj.options[index] = encodeURI(preeti.convert_to_unicode(key))
+                            })
+                            arr.push(jsonObj);
+                        }
                     }
-                  }
                     // combine csv header row and csv line to a json object
                     // jsonObj.a ==> 1 or 4
                 })
                 .on('done', (error) => {
                     // console.log('end', arr)
                     arr = arr.map((element) => {
-                        element.subject  = req.body.subject;
-                        element.class  = req.body.class;
+                        element.subject = req.body.subject;
+                        element.class = req.body.class;
                         return element;
                     });
-                    console.log(arr.length,cntr)
+                    console.log(arr.length, cntr)
                     // console.log(arr)
                     qstnController.bulk(arr, function(err, rslt) {
                         if (err) {

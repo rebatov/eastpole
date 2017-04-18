@@ -48,7 +48,7 @@ router.post('/createUser', function(req, res) {
                             usr[0].password = undefined;
                             console.log(usr[0])
                             res.json({
-                                "status": 200,
+                                "status": 500,
                                 "message": "User with your class and roll number already exists",
                                 "data": usr
                             })

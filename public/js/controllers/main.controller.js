@@ -92,6 +92,7 @@ user paging
             //     })
             // success.data.options = stringify
             $scope.qstnData = o;
+            // $scope.qstnData[0].question=utf8.decode($scope.qstnData[0].question)
             $scope.total = success.count
             console.log($scope.total)
         }).
@@ -252,6 +253,11 @@ user paging
         else{
         arr = obj.options.split(',')
         obj.options = arr;
+        obj.question = encodeURI(obj.question);
+        obj.answer = encodeURI(obj.answer);
+        obj.options.forEach(function(key,index){
+          obj.options[index] = encodeURI(key);
+        })
         Question.create(obj).success(
             function(success) {
                 console.log(success)
@@ -284,14 +290,20 @@ user paging
             User.create(obj).
             success(function(success) {
                 console.log(success)
-                alert(success.message)
-                $scope.nowlogin = true;
+                if(success.status == 200){
+                  $scope.nowlogin = true;
+                  swal("Successful signup","Now login with the credentials","success")
+                  location.reload();
+                }
+                else{
+                  swal("Error signup",success.message,"error")
+                }
                 // location.reload();
             }).
             error(function(err) {
                 console.log(err)
                 $scope.err = true;
-                // location.reload();
+                location.reload();
             })
         }
         else{
@@ -359,7 +371,7 @@ user paging
     */
     $scope.edit_qstn = function() {
         if (idarray.length > 1) {
-            alert("Fuck you, select only one!")
+            swal("Select only one data","Multiple edits not supported for now","warning")
         } else {
             $scope.showQstnEditModal = Modal.showModal;
             Modal.toggleModal();
@@ -444,7 +456,7 @@ user paging
 
     $scope.edit_user = function() {
         if (usridarray.length > 1) {
-            alert("Fuck you, select only one!")
+            swal("Select only one data","Multiple edits not supported for now","warning")
         } else {
             console.log(temp_user)
             $scope.showUserEditModal = Modal.showModal;
@@ -458,8 +470,12 @@ user paging
         console.log(obj);
         User.edit(obj).success(function(success) {
             console.log(success)
+            swal('Successful edit','','success')
+            location.reload();
         }).error(function(err) {
             console.log(err);
+            swal('Edit failed','','error')
+            location.reload();
         })
     }
 
@@ -467,8 +483,11 @@ user paging
     $scope.del_user = function() {
         User.delete(usridarray).success(function(success) {
             console.log(success)
+            swal("Successfull delete","Deleted required user/s","success")
+            location.reload();
         }).error(function(err) {
             console.log(err)
+            swal("Something went wrong",err,"error")
         })
     }
 
@@ -587,7 +606,7 @@ user paging
         obj.pageNumber = 1
         Question.class(obj).success(function(success) {
             console.log(success)
-            $scope.qstnData = success.documents
+            $scope.qstnData = stringifier(success.documents);
             $scope.total = success.count;
             $scope.pageSize = obj.docsPerPage;
         }).error(function(err) {
@@ -751,7 +770,7 @@ user paging
     }
       $scope.upload = function(file) {
         console.log(file)
-        if(file.type == "text/csv"){
+        // if(file.type == "text/csv" || file.type == "application/vnd.ms-excel"){
       file.upload = Upload.upload({
         url: '/question/upload/',
         data: {class: $scope.class,subject:$scope.sub,file: file},
@@ -768,10 +787,10 @@ user paging
         // Math.min is to fix IE which reports 200% sometimes
         file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
       });
-      }
-      else{
-        swal("Filetype mismatch!", "Please upload CSV file", "error")
-      }
+      // }
+      // else{
+      //   swal("Filetype mismatch!", "Please upload CSV file", "error")
+      // }
     }
 
     // multi publish

@@ -28,6 +28,7 @@ qstnController.prototype.create = function(question, callback) {
 
 
 qstnController.prototype.bulk = function(array,callback){
+  console.log(array)
   Question.create(array,function(err,data){
     if(err)
       callback(err)
@@ -117,6 +118,13 @@ qstnController.prototype.getClass = function(obj,callback) {
         if(err)
             callback(err)
         else{
+          result.documents.forEach(function(key, index) {
+                key.question = decodeURI(key.question);
+                key.answer = decodeURI(key.answer);
+                key.options.forEach(function(k, i) {
+                    key.options[i] = decodeURI(k)
+                })
+            })
             callback(null,result)
         }
     },obj.docsPerPage,obj.pageNumber)
@@ -145,7 +153,7 @@ qstnController.prototype.publishClassAndSubject = function(obj,callback){
      else{
        let idarray = _.map(data,'_id')
        Question.update({_id:{$in:idarray}},
-         {$set:{status:"published"}},
+         {$set:{status:obj.status}},
          {multi: true}
          ,function(err,result){
            if(err)
@@ -211,6 +219,13 @@ qstnController.prototype.getSubject = function(obj,callback) {
         if(err)
             callback(err)
         else{
+          result.documents.forEach(function(key, index) {
+                key.question = decodeURI(key.question);
+                key.answer = decodeURI(key.answer);
+                key.options.forEach(function(k, i) {
+                    key.options[i] = decodeURI(k)
+                })
+            })
             callback(null,result)
         }
     },obj.docsPerPage,obj.pageNumber)
@@ -279,6 +294,12 @@ qstnController.prototype.exam = function(obj,callback){
             console.log(questions[x]['answer'])
             questions[x]['answer']=undefined
             // console.log(questions[x])
+            questions[x]['question'] = decodeURI(questions[x]['question']);
+                console.log(questions[x].options)
+                questions[x].options.forEach(function(key,index){
+                  console.log(key,index)
+                  questions[x].options[index] = decodeURI(key)
+                })
             responsearray.push(questions[x])
             if(responsearray.length === questions.length){
             callback(null,shuffle(responsearray))
@@ -302,10 +323,12 @@ qstnController.prototype.result = function(obj,callback){
         else{
             console.log(rslt)
             for(var each in rslt){
-                console.log('compare',sorted[each].answer,rslt[each].answer)
-                if(sorted[each].answer === rslt[each].answer){
+                if(sorted[each].answer!=null){
+                  console.log('compare',sorted[each].answer.replace(/\s/g, ''),decodeURI(rslt[each].answer).replace(/\s/g, ''))
+                if(sorted[each].answer.replace(/\s/g, '') === decodeURI(rslt[each].answer).replace(/\s/g, '')){
                     score +=1;
                 }
+              }
             }
             obj.score = score
             Result.create(obj,function(err,rslt){
@@ -335,6 +358,15 @@ qstnController.prototype.getNeeded = function(obj,callback){
         if(err)
             callback(err)
         else{
+          result.documents.forEach(function(key, index) {
+              key.question = decodeURI(key.question);
+              key.answer = decodeURI(key.answer);
+              key.options.forEach(function(k, i) {
+                  key.options[i] = decodeURI(k)
+              })
+              console.log(key)
+          })
+          console.log(result.documents)
             callback(null,result)
         }
     },obj.docsPerPage,obj.pageNumber)

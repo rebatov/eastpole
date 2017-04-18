@@ -1,10 +1,6 @@
 <div ng-controller="StudentController" ng-init="getQstns()">
     <h1>Welcome {{user}}</h1>
-    <h2>Choose your subject</h2>
-    <select name="status" ng-model="s.subject" class="form-control" required>
-        <option value="">Please Select subject</option>
-        <option ng-repeat="x in subjects" value="{{x}}">{{x}}</option>
-    </select>
+    <h2>Today's exam: ENTRANCE</h2>
     <div>
         <ol>
             <li ng-repeat="qstn in qstns">

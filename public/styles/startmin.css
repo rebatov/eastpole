@@ -5,7 +5,10 @@
  */
 
 body {
-    background-color: #f8f8f8;
+    background-image: url(../images/bg.jpg) !important;
+    font-family: 'Mirza', serif !important;
+    font-size: 48px;
+    color: #074f5d !important;
 }
 
 #wrapper {

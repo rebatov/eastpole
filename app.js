@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var config = require('./config/config');
-
+var path = require('path')
 mongoose.connect(config.database,function(err){
 	if(err){
 		console.log(err);

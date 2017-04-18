@@ -71,19 +71,18 @@ controller('StudentController', function($scope, $rootScope,
         // })
     }
 
-    $scope.submitQstns = function(data) {
+    $scope.submitQstns = function() {
         console.log(reqarray)
-        if(data){
         var obj = {
         	reqarray:reqarray,
         	username:$scope.user,
-        	subject:data.subject,
+        	subject:$scope.subject,
             class:$scope.class,
             term:$scope.term,
         }
         swal({
                 title: "Are you sure?",
-                text: "You are about submit the paper",
+                text: "You are about to submit the paper",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -108,10 +107,6 @@ controller('StudentController', function($scope, $rootScope,
                     swal("Cancelled", "You can continue", "success");
                 }
             });
-          }
-          else{
-            alert("Choose the examination subject")
-          }
     }
 
     /*

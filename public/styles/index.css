@@ -7,10 +7,10 @@
 /
 body {
     /*background-color: whitesmoke ! important;*/
-    background-image: url(../images/abstract-1.jpg);
-    font-family: 'Mirza', serif ! important;
+    background-image: url(../images/bg.jpg) !important;
+    font-family: 'Mirza', serif !important;
     font-size: 48px;
-    color: #074f5d ! important;
+    color: #074f5d !important;
 }
 
 body.ng-scope.ng-binding {

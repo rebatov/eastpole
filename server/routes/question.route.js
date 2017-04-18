@@ -7,6 +7,7 @@
 
 'use strict';
 var express = require('express');
+var utf8 = require('../../utf8.js')
 var router = express.Router();
 require('../models/question.model');
 var Controller = require('../controllers/question.controller');
@@ -14,9 +15,9 @@ var qstnController = new Controller();
 var Islogged = require('../utilities/loginCheck');
 var islogged = new Islogged();
 var multer = require('multer')
-let LineByLineReader = require('line-by-line');
+// let LineByLineReader = require('line-by-line');
 let subjects = require('../utilities/subject.js')
-
+const preeti = require('../utilities/preeti')
 router.use(function(req, res, next) { //allow cross origin requests
     res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
     res.header("Access-Control-Allow-Origin", "http://localhost");
@@ -28,7 +29,8 @@ router.use(function(req, res, next) { //allow cross origin requests
 
 var storage = multer.diskStorage({ //multers disk storage settings
     destination: function(req, file, cb) {
-        cb(null, 'public/uploads');
+        // cb(null, '/home/eastpole/eastpole/public/uploads/');
+        cb(null, 'public/uploads/');
     },
     filename: function(req, file, cb) {
         var datetimestamp = Date.now();
@@ -466,16 +468,40 @@ router.post('/upload', function(req, res) {
             })
         } else {
             console.log(req.body, req.file)
-            let lr = new LineByLineReader(req.file.path);
+            // let lr = new LineByLineReader(req.file.path);
             const csvFilePath = '<path to csv file>'
             const csv = require('csvtojson')
             let arr = [];
+            let cntr = 0;
             csv()
                 .fromFile(req.file.path)
                 .on('json', (jsonObj) => {
                     jsonObj.options = jsonObj.options.split('@')
-                    console.log(jsonObj)
+                    // console.log(jsonObj)
+                    if(req.body.subject !== 'nepali'){
+                      console.log(req.body.subject,'hola')
+                    jsonObj.question = encodeURI(jsonObj.question);
+                    jsonObj.answer = encodeURI(jsonObj.answer)
+                    jsonObj.options.forEach(function(key,index){
+                      jsonObj.options[index] = encodeURI(key)
+                    })
+                    // console.log(jsonObj)
                     arr.push(jsonObj);
+                  }else{
+                    console.log(req.body.subject)
+                    console.log(jsonObj.answer)
+                    if(jsonObj.answer.length > 1){
+                      cntr ++ ;
+                      // console.log(jsonObj.question)
+                      console.log(preeti.convert_to_unicode(jsonObj.question))
+                      jsonObj.question = encodeURI(preeti.convert_to_unicode(jsonObj.question));
+                      jsonObj.answer = encodeURI(preeti.convert_to_unicode(jsonObj.answer));
+                      jsonObj.options.forEach(function(key,index){
+                        jsonObj.options[index] = encodeURI(preeti.convert_to_unicode(key))
+                      })
+                      arr.push(jsonObj);
+                    }
+                  }
                     // combine csv header row and csv line to a json object
                     // jsonObj.a ==> 1 or 4
                 })
@@ -486,7 +512,8 @@ router.post('/upload', function(req, res) {
                         element.class  = req.body.class;
                         return element;
                     });
-                    console.log(arr)
+                    console.log(arr.length,cntr)
+                    // console.log(arr)
                     qstnController.bulk(arr, function(err, rslt) {
                         if (err) {
                             res.json({

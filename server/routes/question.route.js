@@ -105,6 +105,7 @@ router.post('/create', function(req, res) {
         if (err) {
             console.log(err)
         } else {
+          console.log(req.body,req.files)
             if (req.files) {
                 // console.log(req.body, req.files)
                 let opt = [];

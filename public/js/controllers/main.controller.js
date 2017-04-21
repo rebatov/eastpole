@@ -812,7 +812,87 @@ user paging
       })
     }
 
+// add questions using images
+$scope.add_questions_images = function(){
+  $scope.nice = 0;
+  // alert("here here")
+  Modal.toggleModal();
+  $scope.showaddQstnPicModal = Modal.showModal;
+}
 
+$scope.uploadFile = function(x,y,z){
+  console.log(x,y,z)
+  var filename = event.target.files[0].name;
+        alert('file was selected: ' + filename);
+}
+
+$scope.upload_now = function(obj){
+  // console.log(obj)
+  let x = 'file'+obj.answer;
+  obj.answer = x;
+  console.log(obj)
+  var formData = new FormData()
+  for ( var key in obj ) {
+    formData.append(key, obj[key]);
+}
+  console.log(formData)
+  jQuery.ajax({
+    url: '/question/create/',
+    data: formData,
+    cache: false,
+    enctype: 'multipart/form-data',
+    contentType: false,
+    dataType: 'json',
+    processData: false,
+    type: 'POST',
+    success: function(data){
+        console.log(data);
+    }
+});
+}
+
+})
+
+
+
+//Directive that returns an element which adds buttons on click which show an alert on click
+app.directive("addbuttonsbutton", function(){
+	return {
+		restrict: "E",
+		template: "<button addbuttons>Click to add options</button>"
+	}
+});
+
+//Directive for adding buttons on click that show an alert on click
+app.directive("addbuttons", function($compile){
+	return function(scope, element, attrs){
+		element.bind("click", function(){
+			scope.nice++;
+			angular.element(document.getElementById('space-for-buttons')).append($compile("<input type='file' ngf-select ng-model='addPicQstn.file"+scope.nice+ "' "+"name=file-"+scope.nice
+             + "accept='image/*' ngf-max-size='2MB' required ngf-model-invalid='errorFile'><i ng-show='myForm.file.$error.required'>*required</i><br>")(scope));
+		});
+	};
+});
+
+app.directive('customOnChange', function() {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      console.log(attrs)
+      var onChangeFunc = scope.$eval(attrs.customOnChange);
+      element.bind('change', onChangeFunc);
+    }
+  };
+});
+
+//Directive for showing an alert on click
+app.directive("alert", function(){
+	return function(scope, element, attrs){
+		element.bind("click", function(){
+			console.log(attrs);
+			alert("This is alert #"+attrs.alert);
+		});
+	};
 })
 app.controller('MyCtrl', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
   // $scope.uploadtest = "voila"

@@ -198,12 +198,12 @@
                     <tr>
                         <th></th>
                         <th style="width:50%">Question</th>
-                        <th>Answer</th>
+                        <th ng-show="false">Answer</th>
                         <th>Status</th>
                         <th>Class</th>
                         <th>Subject</th>
                         <th>Created Date</th>
-                        <th>Options</th>
+                        <th ng-show="false">Options</th>
                         <th>Updated Date</th>
                     </tr>
                 </thead>
@@ -212,13 +212,13 @@
                         <td>
                             <input type="checkbox" ng-change="selectQstn(chk,each)" ng-model="chk.select"> {{selecteach}}
                         </td>
-                        <td>{{each.question}}</td>
-                        <td>{{each.answer}}</td>
+                        <td>{{each.question.value}}</td>
+                        <td ng-show="false">{{each.answer}}</td>
                         <td>{{each.status}}</td>
                         <td>{{each.class}}</td>
                         <td>{{each.subject}}</td>
                         <td>{{each.createdDate}}</td>
-                        <td>{{each.options}}</td>
+                        <td ng-show="false">{{each.options}}</td>
                         <td>{{each.updatedDate}}</td>
                     </tr>
                 </tbody>
@@ -238,14 +238,20 @@
                 <form role="form" ng-submit="qstnEditor(editQstn)" name="qstnEditForm">
                     <div class="form-group">
                         <label for="question">Question</label>
-                        <textarea ng-model="editQstn.question" type="text" class="form-control" placeholder="Enter Question" name="qstn" required></textarea>
+                        <textarea ng-model="editQstn.question.value" type="text" class="form-control" placeholder="Enter Question" name="qstn" required></textarea>
+                        <div class="" ng-if="editQstn.question.path">
+                          <img src="{{editQstn.question.path}}" alt="" width="300" height:"300">
+                        </div>
                     </div>
                     <div ng-show="qstnEditForm.qstn.$error.required && !qstnEditForm.qstn.$pristine" class="alert alert-danger">
                         <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Question required</strong>
                     </div>
                     <div class="form-group">
                         <label for="options">Options</label>
-                        <input ng-model="editQstn.options" class="form-control" name="option" required/>
+                        <input ng-model="editQstn.options.mockVal" class="form-control" name="option" value="{{editQstn.mockVal}}" required/>
+                        <div class="" ng-if="editQstn.question.path">
+                          <img ng-repeat="each in editQstn.options" src="{{each.path}}" alt="" width="300" height:"300" style="padding-bottom:10px;">
+                        </div>
                     </div>
                     <div ng-show="qstnEditForm.option.$error.required && !qstnEditForm.option.$pristine" class="alert alert-danger">
                         <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Options required</strong>

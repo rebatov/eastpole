@@ -12,7 +12,7 @@ var mongoosePages = require('mongoose-pages');
 var questionSchema = new Schema({
 		question:{type:Object},
 		options:{type:Array},
-		answer:{type:String},
+		answer:{type:Number},
 		class:{type:String},
 		subject:{type:String},
 		status:{type:String},

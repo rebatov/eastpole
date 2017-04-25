@@ -112,22 +112,23 @@ router.post('/create', function(req, res) {
                 let obj = req.body;
                 req.files.forEach((k, i) => {
                     // console.log(k)
-                    if (k.fieldname != 'question') {
+                    if (k.fieldname != 'qstn') {
                         let tmp = {
                             id: i,
-                            path: k.path,
+                            path: 'uploads/'+k.filename,
                             value: null
                         };
                         opt.push(tmp)
                     } else {
                         obj.question = {
                             "value": req.body.question,
-                            "path": k.path
+                            "path": 'uploads/'+k.filename
                         }
                     }
                 });
                 // console.log(opt);
                 let index = req.files.findIndex((obj => obj.fieldname === req.body.answer))
+                console.log(index)
                 if (index == -1) {
                     return res.status(500).send({
                         status: "error",
@@ -144,7 +145,7 @@ router.post('/create', function(req, res) {
                         "path": null
                     }
                 }
-                console.log(obj);
+                console.log('multipart',obj);
                 create(obj);
             } else {
                 let opt = [];
@@ -164,7 +165,7 @@ router.post('/create', function(req, res) {
                         error: "No option within specified options"
                     })
                 }else{
-                  req.body['answer']=index
+                  req.body['answer']=parseInt(index)
                 }
                 obj = req.body;
                 obj['options'] = opt

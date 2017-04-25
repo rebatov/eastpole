@@ -359,10 +359,11 @@ qstnController.prototype.getNeeded = function(obj,callback){
             callback(err)
         else{
           result.documents.forEach(function(key, index) {
-              key.question = decodeURI(key.question);
-              key.answer = decodeURI(key.answer);
+              key.question.value = decodeURI(key.question.value);
+              // key.answer = decodeURI(key.answer);
               key.options.forEach(function(k, i) {
-                  key.options[i] = decodeURI(k)
+                // console.log('=======',k)
+                  key.options[i].value = decodeURI(k.value)
               })
               console.log(key)
           })

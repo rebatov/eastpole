@@ -70,6 +70,18 @@ user paging
         return object;
 
     }
+    function stringy(object) {
+        console.log(object)
+        var stringify = ""
+        object.forEach(function(x, i) {
+                stringify += x + ",";
+            })
+            stringify = stringify.slice(0, -1);
+            console.log(stringify)
+            stringify = ""
+        return stringify;
+
+    }
     $scope.preload = function() {
 
         // for qstns
@@ -79,8 +91,8 @@ user paging
         var stringify = ""
         Question.paging(obj).
         success(function(success) {
-            console.log(success)
-            var o = stringifier(success.documents)
+            console.log('sucesss',success)
+            // var o = stringifier(success.documents)
             // success.documents.forEach(function(dat, index) {
             //         dat.options.forEach(function(x, i) {
             //             stringify += x + ",";
@@ -91,7 +103,7 @@ user paging
             //         stringify = "";
             //     })
             // success.data.options = stringify
-            $scope.qstnData = o;
+            $scope.qstnData = success.documents;
             // $scope.qstnData[0].question=utf8.decode($scope.qstnData[0].question)
             $scope.total = success.count
             console.log($scope.total)
@@ -344,7 +356,7 @@ user paging
     */
 
     $scope.selectQstn = function(chk, each) {
-
+      console.log('each',each)
         if (chk.select) {
             temp_qstn = each;
             if (idarray.indexOf(each._id) == -1) {
@@ -375,6 +387,9 @@ user paging
         } else {
             $scope.showQstnEditModal = Modal.showModal;
             Modal.toggleModal();
+            var basicArray = temp_qstn.options.map(function(k){console.log(k);return k.value})
+            console.log(basicArray)
+            temp_qstn.mockVal = stringy(basicArray)
             temp_qstn.updatedDate = new Date(temp_qstn.updatedDate);
             $scope.editQstn = temp_qstn;
         }
@@ -847,6 +862,9 @@ $scope.upload_now = function(obj){
     type: 'POST',
     success: function(data){
         console.log(data);
+    },
+    error: function(err){
+      console.log(err);
     }
 });
 }

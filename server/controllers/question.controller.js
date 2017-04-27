@@ -294,11 +294,11 @@ qstnController.prototype.exam = function(obj,callback){
             console.log(questions[x]['answer'])
             questions[x]['answer']=undefined
             // console.log(questions[x])
-            questions[x]['question'] = decodeURI(questions[x]['question']);
+            questions[x]['question'].value = decodeURI(questions[x]['question'].value);
                 console.log(questions[x].options)
                 questions[x].options.forEach(function(key,index){
                   console.log(key,index)
-                  questions[x].options[index] = decodeURI(key)
+                  questions[x].options[index].value = decodeURI(key.value)
                 })
             responsearray.push(questions[x])
             if(responsearray.length === questions.length){
@@ -323,9 +323,10 @@ qstnController.prototype.result = function(obj,callback){
         else{
             console.log(rslt)
             for(var each in rslt){
-                if(sorted[each].answer!=null){
-                  console.log('compare',sorted[each].answer.replace(/\s/g, ''),decodeURI(rslt[each].answer).replace(/\s/g, ''))
-                if(sorted[each].answer.replace(/\s/g, '') === decodeURI(rslt[each].answer).replace(/\s/g, '')){
+                if(sorted[each].answer.id!=null){
+                  console.log('===',sorted[each].answer , rslt[each].answer,typeof(sorted[each].answer.id),typeof(rslt[each].answer))
+                  // console.log('compare',sorted[each].answer.replace(/\s/g, ''),decodeURI(rslt[each].answer).replace(/\s/g, ''))
+                if(sorted[each].answer.id == rslt[each].answer){
                     score +=1;
                 }
               }

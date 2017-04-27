@@ -78,7 +78,6 @@ user paging
             })
             stringify = stringify.slice(0, -1);
             console.log(stringify)
-            stringify = ""
         return stringify;
 
     }
@@ -388,10 +387,19 @@ user paging
             $scope.showQstnEditModal = Modal.showModal;
             Modal.toggleModal();
             var basicArray = temp_qstn.options.map(function(k){console.log(k);return k.value})
+            // temp_qstn.answerPath = temp_qstn.answer.path
+            let index = temp_qstn.answer
+            temp_qstn.questionPath = temp_qstn.question.path;
+            temp_qstn.opts = temp_qstn.options;
+            temp_qstn.question = temp_qstn.question.value;
             console.log(basicArray)
-            temp_qstn.mockVal = stringy(basicArray)
+            temp_qstn.ans = temp_qstn.answer;
+            temp_qstn.answer = temp_qstn.options[temp_qstn.ans].value;
+            temp_qstn.options = stringy(basicArray)
+            console.log(temp_qstn.answer,temp_qstn.options)
             temp_qstn.updatedDate = new Date(temp_qstn.updatedDate);
             $scope.editQstn = temp_qstn;
+            console.log(temp_qstn)
         }
     }
 
@@ -422,11 +430,13 @@ user paging
         obj.options = arr;
         Question.edit(obj).
         success(function(success) {
-            console.log(success)
+            console.log(success);
+            swal('Edit failed','','success')
             location.reload();
         }).
         error(function(err) {
             console.log(err);
+            swal('Edit failed','','error')
             location.reload();
         })
     }

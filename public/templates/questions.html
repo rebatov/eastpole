@@ -238,9 +238,9 @@
                 <form role="form" ng-submit="qstnEditor(editQstn)" name="qstnEditForm">
                     <div class="form-group">
                         <label for="question">Question</label>
-                        <textarea ng-model="editQstn.question.value" type="text" class="form-control" placeholder="Enter Question" name="qstn" required></textarea>
-                        <div class="" ng-if="editQstn.question.path">
-                          <img src="{{editQstn.question.path}}" alt="" width="300" height:"300">
+                        <textarea ng-model="editQstn.question" type="text" class="form-control" placeholder="Enter Question" name="qstn" required></textarea>
+                        <div class="" ng-if="editQstn.questionPath">
+                          <img src="{{editQstn.questionPath}}" alt="" width="300" height:"300">
                         </div>
                     </div>
                     <div ng-show="qstnEditForm.qstn.$error.required && !qstnEditForm.qstn.$pristine" class="alert alert-danger">
@@ -248,9 +248,9 @@
                     </div>
                     <div class="form-group">
                         <label for="options">Options</label>
-                        <input ng-model="editQstn.options.mockVal" class="form-control" name="option" value="{{editQstn.mockVal}}" required/>
-                        <div class="" ng-if="editQstn.question.path">
-                          <img ng-repeat="each in editQstn.options" src="{{each.path}}" alt="" width="300" height:"300" style="padding-bottom:10px;">
+                        <input ng-if="!editQstn.questionPath" ng-model="editQstn.options" class="form-control" name="option" value="{{editQstn.mockVal}}" required/>
+                        <div class="" ng-if="editQstn.questionPath">
+                          <img ng-repeat="each in editQstn.opts" src="{{each.path}}" alt="" width="300" height:"300" style="padding-bottom:10px;">
                         </div>
                     </div>
                     <div ng-show="qstnEditForm.option.$error.required && !qstnEditForm.option.$pristine" class="alert alert-danger">
@@ -258,7 +258,10 @@
                     </div>
                     <div class="form-group">
                         <label for="options">Answer</label>
-                        <input ng-model="editQstn.answer" class="form-control" name="ans" required/>
+                        <input ng-if="!editQstn.questionPath" ng-model="editQstn.answer" class="form-control" name="ans" required/>
+                        <div ng-if="editQstn.questionPath" class="">
+                          <img src="{{editQstn.opts[editQstn.ans].path}}" alt="" width="300" height:"300">
+                        </div>
                     </div>
                     <div ng-show="qstnEditForm.ans.$error.required && !qstnEditForm.ans.$pristine" class="alert alert-danger">
                         <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Answer required</strong>
@@ -284,7 +287,7 @@
                             <option ng-repeat="x in stat" value="{{x}}">{{x}}</option>
                         </select>
                     </div>
-                    <button ng-click="toggleModal()" type="submit" class="btn btn-default">Submit</button>
+                    <button ng-click="toggleModal()" type="submit" class="btn btn-default" ng-disabled="editQstn.questionPath" >Submit</button>
                 </form>
             </modal>
         </div>

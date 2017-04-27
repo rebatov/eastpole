@@ -4,9 +4,18 @@
     <div>
         <ol>
             <li ng-repeat="qstn in qstns">
-                <h4 class="qstn">{{qstn.question}}</h4>
-                <label ng-repeat="opt in qstn.options" class="opt">
-                    <input class="val" type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">{{opt}}
+                <h4 class="qstn">{{qstn.question.value}}</h4>
+                <img ng-if="qstn.question.path" src="{{qstn.question.path}}" alt="" width="300" height:"300">
+                <br />
+                <br />
+                <label ng-repeat="opt in qstn.options" class="opt" ng-if="opt.path">
+                    <input class="val" type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">
+                    <img src="{{opt.path}}" alt="" width="200" height:"200">
+                    <!-- <input ng-if="opt.path" class="val" type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">sss -->
+                </label>
+                <label ng-repeat="opt in qstn.options" class="opt" ng-if="!opt.path">
+                    <input class="val" type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">{{opt.value}}
+                    <!-- <input ng-if="opt.path" class="val" type="radio" ng-model="qstn.selectedAnswer" value="{{opt}}{{$parent.$index}}" id="{{opt}}" name="qstn{{$parent.$index}}" ng-click="checkAnswer(opt,qstn)">sss -->
                 </label>
                 <!--    <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]">
      <input type="radio" name="qstn{{$index}}" ng-model="formData[$index]">

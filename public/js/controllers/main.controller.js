@@ -386,6 +386,7 @@ user paging
         } else {
             $scope.showQstnEditModal = Modal.showModal;
             Modal.toggleModal();
+            console.log('before',temp_qstn)
             var basicArray = temp_qstn.options.map(function(k){console.log(k);return k.value})
             // temp_qstn.answerPath = temp_qstn.answer.path
             let index = temp_qstn.answer
@@ -530,8 +531,8 @@ user paging
         Question.paging(obj).
         success(function(success) {
             console.log(success)
-            var o = stringifier(success.documents)
-            $scope.qstnData = o
+            // var o = stringifier(success.documents)
+            $scope.qstnData = success.documents
         }).error(function(err) {
             console.log(err);
         })
@@ -565,8 +566,8 @@ user paging
         Question.paging(obj).
         success(function(success) {
             console.log(success)
-            var o = stringifier(success.documents)
-            $scope.qstnData = o
+            // var o = stringifier(success.documents)
+            $scope.qstnData = success.documents
             $scope.total = success.count
             $scope.pageSize = obj.docsPerPage
         }).error(function(err) {
@@ -631,7 +632,8 @@ user paging
         obj.pageNumber = 1
         Question.class(obj).success(function(success) {
             console.log(success)
-            $scope.qstnData = stringifier(success.documents);
+            // $scope.qstnData = stringifier(success.documents);
+            $scope.qstnData = success.documents
             $scope.total = success.count;
             $scope.pageSize = obj.docsPerPage;
         }).error(function(err) {
@@ -666,8 +668,8 @@ user paging
         Question.class(obj).
         success(function(success) {
             console.log(success)
-            var o = stringifier(success.documents)
-            $scope.qstnData = o
+            // var o = stringifier(success.documents)
+            $scope.qstnData = success.documents
             $scope.total = success.count
             $scope.pageSize = obj.docsPerPage
         }).error(function(err) {
@@ -690,7 +692,8 @@ user paging
         obj.pageNumber = 1
         Question.subject(obj).success(function(success) {
             console.log('sub',success)
-            $scope.qstnData = stringifier(success.documents)
+            // $scope.qstnData = stringifier(success.documents)
+            $scope.qstnData = success.documents
             $scope.total = success.count;
             $scope.pageSize = obj.docsPerPage;
         }).error(function(err) {
@@ -725,8 +728,8 @@ user paging
         Question.subject(obj).
         success(function(success) {
             console.log(success)
-            var o = stringifier(success.documents)
-            $scope.qstnData = o
+          $scope.qstnData = success.documents
+            // $scope.qstnData = o
             $scope.total = success.count
             $scope.pageSize = obj.docsPerPage
         }).error(function(err) {
